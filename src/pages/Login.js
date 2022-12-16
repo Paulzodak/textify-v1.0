@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Hero from "../images/hero.svg";
 import { useSelector } from "react-redux";
 import Email from "../components/Form/Email";
+import { motion } from "framer-motion";
+import "./Login.css";
 const Container = styled.div`
   /* border: 1px solid red; */
   width: 100vw;
@@ -56,20 +58,36 @@ const Login = () => {
   const { styles } = useSelector((styles) => styles);
 
   return (
-    <Container font={styles.fonts.main}>
-      <HeroImg src={Hero} />
-      <ContentArea>
-        <Hello cl={styles.colors.textBlack}>Hello!</Hello>
-        <Welcome cl={styles.colors.textGrey}>Welcome back!</Welcome>
-        <Form>
-          <Email />
-          <ForgotPassword cl={styles.colors.mainGreen}>
-            Forgot Password?
-          </ForgotPassword>
-          <SignInBtn bg={styles.colors.mainGreen}>Sign In</SignInBtn>
-        </Form>
-      </ContentArea>
-    </Container>
+    <motion.div
+      className="box"
+      animate={{
+        scale: [3, 1],
+        // rotate: [0, 0, 180, 180, 0],
+        // borderRadius: ["0%", "0%", "50%", "50%", "0%"],
+      }}
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+        // times: [0, 0.2, 0.5, 0.8, 1],
+        // repeat: Infinity,
+        repeatDelay: 1,
+      }}
+    >
+      <Container font={styles.fonts.main}>
+        <HeroImg src={Hero} />
+        <ContentArea>
+          <Hello cl={styles.colors.textBlack}>Hello!</Hello>
+          <Welcome cl={styles.colors.textGrey}>Welcome back!</Welcome>
+          <Form>
+            <Email />
+            <ForgotPassword cl={styles.colors.mainGreen}>
+              Forgot Password?
+            </ForgotPassword>
+            <SignInBtn bg={styles.colors.mainGreen}>Sign In</SignInBtn>
+          </Form>
+        </ContentArea>
+      </Container>
+    </motion.div>
   );
 };
 
