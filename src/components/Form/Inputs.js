@@ -31,13 +31,16 @@ const Label = styled.label`
 `;
 const Privacy = styled.div`
   position: absolute;
-  top: 7rem;
+  top: 9.2rem;
   right: 1rem;
 `;
 
-const Email = () => {
+const Inputs = ({ email, setEmail, password, setPassword }) => {
   const { styles } = useSelector((styles) => styles);
   const [privacy, setPrivacy] = useState(true);
+
+  const emailHandler = (e) => setEmail(e.target.value);
+  const passwordHandler = (e) => setPassword(e.target.value);
 
   return (
     <Container font={styles.fonts.main}>
@@ -45,7 +48,15 @@ const Email = () => {
       <br />
       <br />
       <Message />
-      <Input placeholder="Enter email" bg={styles.colors.bgGrey} />
+      <Input
+        // value={email}
+        onChange={emailHandler}
+        placeholder="Enter email"
+        bg={styles.colors.bgGrey}
+      />
+      <br />
+      <br />
+      <Label cl={styles.colors.textBlack}>Password</Label>
       <br />
       <br />
       <Privacy
@@ -53,13 +64,19 @@ const Email = () => {
           setPrivacy((state) => !state);
         }}
       >
-        {privacy ? <ShowIcon /> : <HideIcon />}
+        {!privacy ? <ShowIcon /> : <HideIcon />}
       </Privacy>
       <Lock />
 
-      <Input placeholder="Enter password" bg={styles.colors.bgGrey} />
+      <Input
+        onChange={passwordHandler}
+        // value={password}
+        placeholder="Enter password"
+        bg={styles.colors.bgGrey}
+        type={privacy ? "password" : null}
+      />
     </Container>
   );
 };
 
-export default Email;
+export default Inputs;

@@ -1,10 +1,21 @@
 import React from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import Hero from "../images/hero.svg";
-import { useSelector } from "react-redux";
-import Email from "../components/Form/Email";
+import { useSelector, useDispatch } from "react-redux";
+import Inputs from "../components/Form/Inputs";
 import { motion } from "framer-motion";
 import "./Login.css";
+import { setCurrentUser } from "../redux/user";
+import { signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "../components/firebase";
+import { useNavigate } from "react-router-dom";
+
 const Container = styled.div`
   /* border: 1px solid red; */
   width: 100vw;
@@ -54,9 +65,40 @@ const SignInBtn = styled.button`
   color: white;
   font-size: 1.1rem;
 `;
-const Login = () => {
-  const { styles } = useSelector((styles) => styles);
 
+const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  console.log(user);
+  const { styles } = useSelector((styles) => styles);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  console.log(email);
+  console.log(password);
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      dispatch(setCurrentUser({ user: user.email }));
+      navigate("/Home");
+      console.log("true :" + user);
+    } else {
+      console.log("false :" + user);
+    }
+  });
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const signout = async () => {
+    await signOut(auth)
+      .then()
+      .catch((err) => console.log(err));
+  };
   return (
     <motion.div
       className="box"
@@ -79,14 +121,22 @@ const Login = () => {
           <Hello cl={styles.colors.textBlack}>Hello!</Hello>
           <Welcome cl={styles.colors.textGrey}>Welcome back!</Welcome>
           <Form>
-            <Email />
+            <Inputs
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+            />
             <ForgotPassword cl={styles.colors.mainGreen}>
               Forgot Password?
             </ForgotPassword>
-            <SignInBtn bg={styles.colors.mainGreen}>Sign In</SignInBtn>
+            <SignInBtn onClick={login} bg={styles.colors.mainGreen}>
+              Sign In
+            </SignInBtn>
           </Form>
         </ContentArea>
       </Container>
+      <button onClick={signout}>Sign out</button>
     </motion.div>
   );
 };

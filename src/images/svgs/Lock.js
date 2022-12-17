@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 const Container = styled.div`
   position: absolute;
-  top: 7rem;
+  top: 9.2rem;
   left: 0.7rem;
 `;
 const Lock = () => {
