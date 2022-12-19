@@ -2,8 +2,8 @@ import React from "react";
 import styled from "styled-components";
 const Container = styled.div`
   position: absolute;
-  top: 3rem;
-  left: 0.7rem;
+  top: ${({ top }) => top};
+  left: ${({ left }) => left};
 `;
 const Message = ({ ps, top, left, width, height }) => {
   return (

@@ -1,11 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import { SignInBtn } from "../UI/Buttons";
 import Hero from "../images/hero.svg";
 import { useSelector, useDispatch } from "react-redux";
 import Inputs from "../components/Form/Inputs";
 import { motion } from "framer-motion";
-import { SignInBtn } from "../UI/Buttons";
 import "./Login.css";
 import { setCurrentUser } from "../redux/user";
 import { signOut } from "firebase/auth";
@@ -19,8 +19,13 @@ import { useNavigate } from "react-router-dom";
 import { ContentArea } from "../UI/signLoginGlobal";
 import { HeroImg } from "../UI/signLoginGlobal";
 import { Container } from "../UI/signLoginGlobal";
+
 import { H1 } from "../UI/signLoginGlobal";
 import { P } from "../UI/signLoginGlobal";
+
+import { addDoc, collection } from "firebase/firestore";
+
+import { db } from "../components/firebase";
 
 const Hello = styled.h1`
   color: ${({ cl }) => cl};
@@ -35,13 +40,15 @@ const Form = styled.form`
   margin: 3rem 0 0 0;
 `;
 
-const ForgotPassword = styled.p`
-  float: right;
-  color: ${({ cl }) => cl};
-  margin: 1rem 0;
+const Checkbox = styled.input`
+  background-color: ${(props) => props.cl};
+  margin: 0 1rem 0 0;
 `;
-
-const Login = () => {
+const Box = styled.div`
+  margin: 1.5rem 0;
+`;
+const Terms = styled.span``;
+const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -49,6 +56,7 @@ const Login = () => {
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
   console.log(email);
   console.log(password);
   onAuthStateChanged(auth, (user) => {
@@ -60,9 +68,14 @@ const Login = () => {
       console.log("false :" + user);
     }
   });
-  const login = async (e) => {
+  const signup = async (e) => {
     e.preventDefault();
     try {
+      const docRef = await addDoc(collection(db, "users"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815,
+      });
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user);
     } catch (error) {
@@ -89,32 +102,40 @@ const Login = () => {
       <Container font={styles.fonts.main}>
         <HeroImg src={Hero} />
         <ContentArea>
-          <Hello cl={styles.colors.textBlack}>Hello!</Hello>
-          <Welcome cl={styles.colors.textGrey}>Welcome back!</Welcome>
+          <Hello cl={styles.colors.textBlack}>Welcome!</Hello>
+          <Welcome cl={styles.colors.textGrey}>Create an account</Welcome>
           <Form>
             <Inputs
+              showNickname
+              nickname={nickname}
+              setNickname={setNickname}
               email={email}
               setEmail={setEmail}
               password={password}
               setPassword={setPassword}
             />
-            <ForgotPassword cl={styles.colors.mainGreen}>
-              Forgot Password?
-            </ForgotPassword>
-            <SignInBtn onClick={login} bg={styles.colors.mainGreen}>
-              Sign In
+            <Box>
+              <Checkbox cl={styles.colors.mainGreen} type="checkbox" />
+              <Terms>
+                I agree with
+                <P cl={styles.colors.mainGreen}> Terms & Conditions</P>
+              </Terms>
+            </Box>
+
+            <SignInBtn onClick={signup} bg={styles.colors.mainGreen}>
+              Sign Up
             </SignInBtn>
           </Form>
+          <H1>
+            Already have an account? &nbsp;
+            <P onClick={() => navigate("/")} cl={styles.colors.mainGreen}>
+              Sign in
+            </P>
+          </H1>
         </ContentArea>
-        <H1>
-          Don't have an account? &nbsp;
-          <P onClick={() => navigate("/Register")} cl={styles.colors.mainGreen}>
-            Sign up
-          </P>
-        </H1>
       </Container>
     </motion.div>
   );
 };
 
-export default Login;
+export default Register;

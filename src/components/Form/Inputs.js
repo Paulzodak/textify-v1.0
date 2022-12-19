@@ -31,23 +31,53 @@ const Label = styled.label`
 `;
 const Privacy = styled.div`
   position: absolute;
-  top: 9.2rem;
-  right: 1rem;
+  top: 15.5rem;
+  right: 2rem;
 `;
-
-const Inputs = ({ email, setEmail, password, setPassword }) => {
+const UserIcon = styled.div`
+  position: absolute;
+  top: 1rem;
+`;
+const Inputs = ({
+  setNickname,
+  nickname,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  showNickname,
+}) => {
   const { styles } = useSelector((styles) => styles);
   const [privacy, setPrivacy] = useState(true);
 
   const emailHandler = (e) => setEmail(e.target.value);
   const passwordHandler = (e) => setPassword(e.target.value);
+  const nicknameHandler = (e) => setNickname(e.target.value);
 
   return (
     <Container font={styles.fonts.main}>
+      {showNickname ? (
+        <>
+          <Label cl={styles.colors.textBlack}>Nickname</Label>
+          <br />
+          <br />
+          <UserIcon></UserIcon>
+          <Input
+            // value={email}
+            onChange={emailHandler}
+            placeholder="Enter a nickname"
+            bg={styles.colors.bgGrey}
+          />
+          <br />
+          <br />
+        </>
+      ) : (
+        <></>
+      )}
       <Label cl={styles.colors.textBlack}>Email</Label>
       <br />
       <br />
-      <Message />
+      <Message top="9.3rem" left="1rem" />
       <Input
         // value={email}
         onChange={emailHandler}
@@ -66,7 +96,7 @@ const Inputs = ({ email, setEmail, password, setPassword }) => {
       >
         {!privacy ? <ShowIcon /> : <HideIcon />}
       </Privacy>
-      <Lock />
+      <Lock top="15.5rem" left="1rem" />
 
       <Input
         onChange={passwordHandler}
