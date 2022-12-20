@@ -4,6 +4,7 @@ const Container = styled.div`
   position: absolute;
   top: ${({ top }) => top};
   left: ${({ left }) => left};
+  background-color: green;
 `;
 const Message = ({ ps, top, left, width, height }) => {
   return (

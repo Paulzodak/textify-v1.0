@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import Message from "../../images/svgs/Message";
 import Lock from "../../images/svgs/Lock";
 import { useSelector } from "react-redux";
-import ShowIcon from "../../images/svgs/ShowIcon";
-import HideIcon from "../../images/svgs/HideIcon";
 import { useState } from "react";
+import { MdOutlineMailOutline as MessageIcon } from "react-icons/md";
+
+import { BiLockAlt as LockIcon } from "react-icons/bi";
+import { BiShowAlt as ShowIcon } from "react-icons/bi";
+import { BiHide as HideIcon } from "react-icons/bi";
 
 const Container = styled.div`
   font-family: ${({ font }) => font};
@@ -31,12 +33,22 @@ const Label = styled.label`
 `;
 const Privacy = styled.div`
   position: absolute;
-  top: 15.5rem;
+  top: 9.3rem;
   right: 2rem;
 `;
 const UserIcon = styled.div`
   position: absolute;
   top: 1rem;
+`;
+const MessageIconContainer = styled.div`
+  position: absolute;
+  top: 3rem;
+  left: 1rem;
+`;
+const LockIconContainer = styled.div`
+  position: absolute;
+  top: 9.3rem;
+  left: 1rem;
 `;
 const Inputs = ({
   setNickname,
@@ -56,28 +68,12 @@ const Inputs = ({
 
   return (
     <Container font={styles.fonts.main}>
-      {showNickname ? (
-        <>
-          <Label cl={styles.colors.textBlack}>Nickname</Label>
-          <br />
-          <br />
-          <UserIcon></UserIcon>
-          <Input
-            // value={email}
-            onChange={emailHandler}
-            placeholder="Enter a nickname"
-            bg={styles.colors.bgGrey}
-          />
-          <br />
-          <br />
-        </>
-      ) : (
-        <></>
-      )}
       <Label cl={styles.colors.textBlack}>Email</Label>
       <br />
       <br />
-      <Message top="9.3rem" left="1rem" />
+      <MessageIconContainer>
+        <MessageIcon size="1.5rem" />
+      </MessageIconContainer>
       <Input
         // value={email}
         onChange={emailHandler}
@@ -94,9 +90,11 @@ const Inputs = ({
           setPrivacy((state) => !state);
         }}
       >
-        {!privacy ? <ShowIcon /> : <HideIcon />}
+        {!privacy ? <ShowIcon size="1.5rem" /> : <HideIcon size="1.5rem" />}
       </Privacy>
-      <Lock top="15.5rem" left="1rem" />
+      <LockIconContainer>
+        <LockIcon size="1.5rem" />
+      </LockIconContainer>
 
       <Input
         onChange={passwordHandler}
@@ -105,6 +103,24 @@ const Inputs = ({
         bg={styles.colors.bgGrey}
         type={privacy ? "password" : null}
       />
+      {showNickname ? (
+        <>
+          <br />
+          <br />
+          <Label cl={styles.colors.textBlack}>Nickname</Label>
+          <br />
+          <br />
+          <UserIcon></UserIcon>
+          <Input
+            // value={email}
+            onChange={emailHandler}
+            placeholder="Enter a nickname"
+            bg={styles.colors.bgGrey}
+          />
+        </>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };
