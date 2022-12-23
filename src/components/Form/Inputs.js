@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Lock from "../../images/svgs/Lock";
+import classes from "./Inputs.module.css";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { MdOutlineMailOutline as MessageIcon } from "react-icons/md";
@@ -18,7 +18,7 @@ const Input = styled.input`
   height: 3rem;
 
   border: none;
-  background-color: ${({ bg }) => bg};
+  /* background-color: ${({ colors }) => colors.lightBgGreen}; */
   font-size: 1.1rem;
   padding: 0 0 0 3rem;
   box-sizing: border-box;
@@ -61,10 +61,41 @@ const Inputs = ({
 }) => {
   const { styles } = useSelector((styles) => styles);
   const [privacy, setPrivacy] = useState(true);
+  const [emailIsValid, setEmailIsValid] = useState(true);
+  const [passwordIsValid, setPasswordIsValid] = useState(true);
+  const [nicknameIsValid, setNicknameIsValid] = useState(true);
+  const emailHandler = (e) => {
+    setEmail(e.target.value);
+    if (
+      e.target.value.length > 11 &&
+      e.target.value.includes("@") &&
+      e.target.value.includes(".com")
+    ) {
+      setEmailIsValid(true);
+      console.log(emailIsValid);
+    } else {
+      setEmailIsValid(false);
+      console.log(emailIsValid);
+    }
 
-  const emailHandler = (e) => setEmail(e.target.value);
-  const passwordHandler = (e) => setPassword(e.target.value);
-  const nicknameHandler = (e) => setNickname(e.target.value);
+    // setEmail(e.target.value);
+  };
+  const passwordHandler = (e) => {
+    setPassword(e.target.value);
+    if (e.target.value.length > 5) {
+      setPasswordIsValid(true);
+    } else {
+      setPasswordIsValid(false);
+    }
+  };
+  const nicknameHandler = (e) => {
+    setNickname(e.target.value);
+    if (e.target.value.length > 4) {
+      setNicknameIsValid(true);
+    } else {
+      setNicknameIsValid(false);
+    }
+  };
 
   return (
     <Container font={styles.fonts.main}>
@@ -76,9 +107,12 @@ const Inputs = ({
       </MessageIconContainer>
       <Input
         // value={email}
+        className={emailIsValid ? classes.valid : classes.invalid}
         onChange={emailHandler}
+        onFocus={emailHandler}
+        onBlur={emailHandler}
         placeholder="Enter email"
-        bg={styles.colors.bgGrey}
+        colors={styles.colors}
       />
       <br />
       <br />
@@ -98,9 +132,11 @@ const Inputs = ({
 
       <Input
         onChange={passwordHandler}
-        // value={password}
+        onBlur={passwordHandler}
+        onFocus={passwordHandler}
+        className={passwordIsValid ? classes.valid : classes.invalid}
         placeholder="Enter password"
-        bg={styles.colors.bgGrey}
+        colors={styles.colors}
         type={privacy ? "password" : null}
       />
       {showNickname ? (
@@ -112,10 +148,12 @@ const Inputs = ({
           <br />
           <UserIcon></UserIcon>
           <Input
-            // value={email}
-            onChange={emailHandler}
+            className={nicknameIsValid ? classes.valid : classes.invalid}
+            onChange={nicknameHandler}
+            onBlur={nicknameHandler}
+            onFocus={nicknameHandler}
             placeholder="Enter a nickname"
-            bg={styles.colors.bgGrey}
+            colors={styles.colors}
           />
         </>
       ) : (

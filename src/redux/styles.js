@@ -6,7 +6,10 @@ export const styleSlice = createSlice({
       textBlack: "#171A1FFF",
       textGrey: "#9095A0FF",
       bgGrey: " #F3F4F6FF",
+      lightBgGreen: "#EBFDFFFF",
+      errBgRed: "#ffebeb",
       mainGreen: " #00BDD6FF",
+      darkMainGreen: "#00A9C0FF",
     },
     fonts: {
       main: '"Epilogue", sans-serif',

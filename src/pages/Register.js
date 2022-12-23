@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { SignInBtn } from "../UI/Buttons";
 import Hero from "../images/hero.svg";
@@ -60,9 +60,24 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
+  const [formIsValid, setFormIsValid] = useState(false);
+  console.log(nickname);
+  useEffect(() => {
+    if (
+      email.length > 11 &&
+      email.includes("@") &&
+      email.includes(".com") &&
+      password.length > 5 &&
+      nickname.length > 5
+    ) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [email, password, nickname]);
 
-  // cons ole.log(email);
-  // console.log(password);
+  console.log(email);
+  console.log(password);
 
   const signup = async (e) => {
     e.preventDefault();
@@ -114,7 +129,12 @@ const Register = () => {
               </Terms>
             </Box>
 
-            <SignInBtn onClick={signup} bg={styles.colors.mainGreen}>
+            <SignInBtn
+              valid={formIsValid}
+              onClick={signup}
+              colors={styles.colors}
+              disabled={!formIsValid}
+            >
               Sign Up
             </SignInBtn>
           </Form>
