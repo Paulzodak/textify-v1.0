@@ -14,6 +14,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
 import { ContentArea } from "../UI/signLoginGlobal";
@@ -21,6 +22,7 @@ import { HeroImg } from "../UI/signLoginGlobal";
 import { Container } from "../UI/signLoginGlobal";
 import { H1 } from "../UI/signLoginGlobal";
 import { P } from "../UI/signLoginGlobal";
+import { db } from "../components/firebase";
 
 const Hello = styled.h1`
   color: ${({ cl }) => cl};
@@ -44,29 +46,29 @@ const ForgotPassword = styled.p`
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  console.log(user);
+  const { user } = useSelector((user) => user);
+  // console.log(user);
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  console.log(email);
-  console.log(password);
+  // console.log(email);
+  // console.log(password);
   onAuthStateChanged(auth, (user) => {
     if (user) {
       dispatch(setCurrentUser({ user: user.email }));
       navigate("/Home");
-      console.log("true :" + user);
+      // console.log("true :" + user);
     } else {
-      console.log("false :" + user);
+      // console.log("false :" + user);
     }
   });
   const login = async (e) => {
     e.preventDefault();
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      // console.log(user);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -79,7 +81,7 @@ const Login = () => {
         // borderRadius: ["0%", "0%", "50%", "50%", "0%"],
       }}
       transition={{
-        duration: 2,
+        duration: 1,
         ease: "easeInOut",
         // times: [0, 0.2, 0.5, 0.8, 1],
         // repeat: Infinity,

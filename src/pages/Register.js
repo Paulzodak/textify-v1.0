@@ -27,6 +27,9 @@ import { addDoc, collection } from "firebase/firestore";
 
 import { db } from "../components/firebase";
 
+import { setDoc } from "firebase/firestore";
+import { doc } from "firebase/firestore";
+
 const Hello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
@@ -51,36 +54,25 @@ const Terms = styled.span``;
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  console.log(user);
+  const { user } = useSelector((user) => user);
+  // console.log(user);
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  console.log(email);
-  console.log(password);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      dispatch(setCurrentUser({ user: user.email }));
-      navigate("/Home");
-      console.log("true :" + user);
-    } else {
-      console.log("false :" + user);
-    }
-  });
+
+  // cons ole.log(email);
+  // console.log(password);
+
   const signup = async (e) => {
     e.preventDefault();
-    try {
-      const docRef = await addDoc(collection(db, "users"), {
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815,
-      });
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
-    } catch (error) {
-      console.log(error);
-    }
+
+    createUserWithEmailAndPassword(auth, email, password).then((res) => {
+      const docRef = doc(db, "users", res.user.uid);
+      const data = { email: email, name: nickname, uid: res.user.uid };
+
+      setDoc(docRef, data);
+    });
   };
 
   return (
@@ -92,7 +84,7 @@ const Register = () => {
         // borderRadius: ["0%", "0%", "50%", "50%", "0%"],
       }}
       transition={{
-        duration: 2,
+        duration: 1,
         ease: "easeInOut",
         // times: [0, 0.2, 0.5, 0.8, 1],
         // repeat: Infinity,
