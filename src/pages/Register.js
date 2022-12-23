@@ -82,12 +82,16 @@ const Register = () => {
   const signup = async (e) => {
     e.preventDefault();
 
-    createUserWithEmailAndPassword(auth, email, password).then((res) => {
-      const docRef = doc(db, "users", res.user.uid);
-      const data = { email: email, name: nickname, uid: res.user.uid };
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        const docRef = doc(db, "users", res.user.uid);
+        const data = { email: email, name: nickname, uid: res.user.uid };
 
-      setDoc(docRef, data);
-    });
+        setDoc(docRef, data);
+        alert("Successful, You can now proceed to Login!");
+        navigate("/");
+      })
+      .catch((res) => alert(res.message));
   };
 
   return (

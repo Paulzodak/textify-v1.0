@@ -8,6 +8,7 @@ import { MdOutlineMailOutline as MessageIcon } from "react-icons/md";
 import { BiLockAlt as LockIcon } from "react-icons/bi";
 import { BiShowAlt as ShowIcon } from "react-icons/bi";
 import { BiHide as HideIcon } from "react-icons/bi";
+import { FiUser as UserIcon } from "react-icons/fi";
 
 const Container = styled.div`
   font-family: ${({ font }) => font};
@@ -36,9 +37,10 @@ const Privacy = styled.div`
   top: 9.3rem;
   right: 2rem;
 `;
-const UserIcon = styled.div`
+const UserIconContainer = styled.div`
   position: absolute;
-  top: 1rem;
+  top: 15.8rem;
+  left: 1rem;
 `;
 const MessageIconContainer = styled.div`
   position: absolute;
@@ -90,7 +92,7 @@ const Inputs = ({
   };
   const nicknameHandler = (e) => {
     setNickname(e.target.value);
-    if (e.target.value.length > 4) {
+    if (e.target.value.length > 5) {
       setNicknameIsValid(true);
     } else {
       setNicknameIsValid(false);
@@ -146,7 +148,9 @@ const Inputs = ({
           <Label cl={styles.colors.textBlack}>Nickname</Label>
           <br />
           <br />
-          <UserIcon></UserIcon>
+          <UserIconContainer>
+            <UserIcon size="1.5rem" />
+          </UserIconContainer>
           <Input
             className={nicknameIsValid ? classes.valid : classes.invalid}
             onChange={nicknameHandler}

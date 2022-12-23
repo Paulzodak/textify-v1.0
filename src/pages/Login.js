@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Hero from "../images/hero.svg";
 import { useSelector, useDispatch } from "react-redux";
@@ -51,6 +51,7 @@ const Login = () => {
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [formIsValid, setFormIsValid] = useState(false);
   // console.log(email);
   // console.log(password);
   onAuthStateChanged(auth, (user) => {
@@ -62,14 +63,26 @@ const Login = () => {
       // console.log("false :" + user);
     }
   });
+  useEffect(() => {
+    if (
+      email.length > 11 &&
+      email.includes("@") &&
+      email.includes(".com") &&
+      password.length > 5
+    ) {
+      setFormIsValid(true);
+    } else {
+      setFormIsValid(false);
+    }
+  }, [email, password]);
   const login = async (e) => {
     e.preventDefault();
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      // console.log(user);
-    } catch (error) {
-      // console.log(error);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((res) => {
+        alert("Successful, You can now proceed to Login!");
+        navigate("/");
+      })
+      .catch((res) => alert(res.message));
   };
 
   return (
@@ -103,7 +116,12 @@ const Login = () => {
             <ForgotPassword cl={styles.colors.mainGreen}>
               Forgot Password?
             </ForgotPassword>
-            <SignInBtn onClick={login} bg={styles.colors.mainGreen}>
+            <SignInBtn
+              valid={formIsValid}
+              onClick={login}
+              colors={styles.colors}
+              disabled={!formIsValid}
+            >
               Sign In
             </SignInBtn>
           </Form>
