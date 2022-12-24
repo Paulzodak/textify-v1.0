@@ -6,7 +6,7 @@ import { BsPeople as PeopleIcon } from "react-icons/bs";
 import { CiSettings as SettingsIcon } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-const Nav = styled.nav`
+const StyledNav = styled.nav`
   position: fixed;
   bottom: 0rem;
   height: 5rem;
@@ -21,13 +21,13 @@ const Nav = styled.nav`
   grid-template-columns: 25% 25% 25% 25%;
   justify-content: space-around;
 `;
-const Name = styled.div`
+const StyledName = styled.div`
   font-size: 0.8rem;
   text-align: center;
   font-weight: bolder;
   color: ${({ color }) => color};
 `;
-const NavItem = styled.div`
+const StyledNavItem = styled.div`
   text-align: center;
   box-sizing: border-box;
   transition: 0.5s;
@@ -44,26 +44,37 @@ const HomeNav = () => {
   const styles = useSelector((styles) => styles);
   const [size, setsize] = useState("2rem");
   const [color, setColor] = useState(" #565E6CFF;");
+  const NavList = [
+    {
+      name: "Message",
+      Icon: <MessageIcon color="inherit" size={size} />,
+    },
+    {
+      name: "Calls",
+      Icon: <VideoIcon color="inherit" size={size} />,
+    },
+    {
+      name: "People",
+      Icon: <PeopleIcon color="inherit" size={size} />,
+    },
+    {
+      name: "Settings",
+      Icon: <SettingsIcon color="inherit" size={size} />,
+    },
+  ];
+
   return (
     <div>
-      <Nav>
-        <NavItem>
-          <MessageIcon color="inherit" size={size} />
-          <Name color="inherit">Messages</Name>
-        </NavItem>
-        <NavItem>
-          <VideoIcon color="inherit" size={size} />
-          <Name color="inherit">Calls</Name>
-        </NavItem>
-        <NavItem>
-          <PeopleIcon color="inherit" size={size} />
-          <Name color="inherit">People</Name>
-        </NavItem>
-        <NavItem>
-          <SettingsIcon color="inherit" size={size} />
-          <Name color="inherit">Settings</Name>
-        </NavItem>
-      </Nav>
+      <StyledNav>
+        {NavList.map((item) => {
+          return (
+            <StyledNavItem>
+              {item.Icon}
+              <StyledName color="inherit">{item.name}</StyledName>
+            </StyledNavItem>
+          );
+        })}
+      </StyledNav>
     </div>
   );
 };
