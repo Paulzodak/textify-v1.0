@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ContentArea = styled.div`
+export const StyledContentArea = styled.div`
   /* border: 1px solid green; */
   position: relative;
   /* top: -14rem; */
@@ -12,14 +12,14 @@ export const ContentArea = styled.div`
   padding: 0.5rem 1rem;
 `;
 
-export const HeroImg = styled.img`
+export const StyledHeroImg = styled.img`
   /* height: 100%; */
   width: 100%;
   position: relative;
   /* top: -6rem; */
 `;
 
-export const Container = styled.div`
+export const StyledContainer = styled.div`
   /* border: 1px solid red; */
   width: 100vw;
   /* max-width: 100vw; */
@@ -27,11 +27,11 @@ export const Container = styled.div`
   /* max-height: 100vh; */
   font-family: ${({ font }) => font};
 `;
-export const H1 = styled.div`
+export const StyledH1 = styled.div`
   margin: 2rem 0;
   text-align: center;
 `;
-export const P = styled.span`
+export const StyledP = styled.span`
   color: ${({ cl }) => cl};
   cursor: pointer;
 `;

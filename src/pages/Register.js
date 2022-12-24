@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { SignInBtn } from "../UI/Buttons";
 import Hero from "../images/hero.svg";
 import { useSelector, useDispatch } from "react-redux";
 import Inputs from "../components/Form/Inputs";
@@ -16,12 +15,13 @@ import {
 } from "firebase/auth";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-import { ContentArea } from "../UI/signLoginGlobal";
-import { HeroImg } from "../UI/signLoginGlobal";
-import { Container } from "../UI/signLoginGlobal";
 
-import { H1 } from "../UI/signLoginGlobal";
-import { P } from "../UI/signLoginGlobal";
+import { StyledContentArea } from "../UI/signLoginGlobal";
+import { StyledHeroImg } from "../UI/signLoginGlobal";
+import { StyledContainer } from "../UI/signLoginGlobal";
+import { StyledH1 } from "../UI/signLoginGlobal";
+import { StyledP } from "../UI/signLoginGlobal";
+import { StyledSignInBtn } from "../UI/Buttons";
 
 import { addDoc, collection } from "firebase/firestore";
 
@@ -30,28 +30,27 @@ import { db } from "../components/firebase";
 import { setDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import Textify from "../components/LoadingTheme/Textify";
-
-const Hello = styled.h1`
+const StyledHello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
 `;
-const Welcome = styled.h2`
+const StyledWelcome = styled.h2`
   color: ${(props) => props.cl};
   margin: 0;
   font-weight: 500;
 `;
-const Form = styled.form`
+const StyledForm = styled.form`
   margin: 3rem 0 0 0;
 `;
 
-const Checkbox = styled.input`
+const StyledCheckbox = styled.input`
   background-color: ${(props) => props.cl};
   margin: 0 1rem 0 0;
 `;
-const Box = styled.div`
+const StyledBox = styled.div`
   margin: 1.5rem 0;
 `;
-const Terms = styled.span``;
+const StyledTerms = styled.span``;
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -116,13 +115,15 @@ const Register = () => {
         repeatDelay: 1,
       }}
     >
-      <Container font={styles.fonts.main}>
+      <StyledContainer font={styles.fonts.main}>
         {loading ? <Textify size="1rem" top="40%" left="25%" /> : null}
-        <HeroImg src={Hero} />
-        <ContentArea>
-          <Hello cl={styles.colors.textBlack}>Welcome!</Hello>
-          <Welcome cl={styles.colors.textGrey}>Create an account</Welcome>
-          <Form>
+        <StyledHeroImg src={Hero} />
+        <StyledContentArea>
+          <StyledHello cl={styles.colors.textBlack}>Welcome!</StyledHello>
+          <StyledWelcome cl={styles.colors.textGrey}>
+            Create an account
+          </StyledWelcome>
+          <StyledForm>
             <Inputs
               showNickname
               nickname={nickname}
@@ -132,35 +133,37 @@ const Register = () => {
               password={password}
               setPassword={setPassword}
             />
-            <Box>
-              <Checkbox
+            <StyledBox>
+              <StyledCheckbox
                 onChange={checkboxHandler}
                 cl={styles.colors.mainGreen}
                 type="checkbox"
               />
-              <Terms>
+              <StyledTerms>
                 I agree with
-                <P cl={styles.colors.mainGreen}> Terms & Conditions</P>
-              </Terms>
-            </Box>
+                <StyledP cl={styles.colors.mainGreen}>
+                  Terms & Conditions
+                </StyledP>
+              </StyledTerms>
+            </StyledBox>
 
-            <SignInBtn
+            <StyledSignInBtn
               valid={formIsValid}
               onClick={signup}
               colors={styles.colors}
               disabled={!formIsValid}
             >
               Sign Up
-            </SignInBtn>
-          </Form>
-          <H1>
+            </StyledSignInBtn>
+          </StyledForm>
+          <StyledH1>
             Already have an account? &nbsp;
-            <P onClick={() => navigate("/")} cl={styles.colors.mainGreen}>
+            <StyledP onClick={() => navigate("/")} cl={styles.colors.mainGreen}>
               Sign in
-            </P>
-          </H1>
-        </ContentArea>
-      </Container>
+            </StyledP>
+          </StyledH1>
+        </StyledContentArea>
+      </StyledContainer>
     </motion.div>
   );
 };

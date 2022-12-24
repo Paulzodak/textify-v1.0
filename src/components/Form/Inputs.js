@@ -10,11 +10,12 @@ import { BiShowAlt as ShowIcon } from "react-icons/bi";
 import { BiHide as HideIcon } from "react-icons/bi";
 import { FiUser as UserIcon } from "react-icons/fi";
 
-const Container = styled.div`
+import { PropTypes } from "prop-types";
+const StyledContainer = styled.div`
   font-family: ${({ font }) => font};
   position: relative;
 `;
-const Input = styled.input`
+const StyledInput = styled.input`
   width: 100%;
   height: 3rem;
 
@@ -26,28 +27,28 @@ const Input = styled.input`
   font-family: inherit;
   border-radius: 0.3rem;
 `;
-const Label = styled.label`
+const StyledLabel = styled.label`
   font-size: 1.2rem;
   color: ${({ cl }) => cl};
   font-weight: 600;
   font-family: inherit;
 `;
-const Privacy = styled.div`
+const StyledPrivacy = styled.div`
   position: absolute;
   top: 9.5rem;
   right: 2rem;
 `;
-const UserIconContainer = styled.div`
+const StyledUserIconContainer = styled.div`
   position: absolute;
   top: 15.8rem;
   left: 1rem;
 `;
-const MessageIconContainer = styled.div`
+const StyledMessageIconContainer = styled.div`
   position: absolute;
   top: 3.2rem;
   left: 1rem;
 `;
-const LockIconContainer = styled.div`
+const StyledLockIconContainer = styled.div`
   position: absolute;
   top: 9.5rem;
   left: 1rem;
@@ -100,14 +101,14 @@ const Inputs = ({
   };
 
   return (
-    <Container font={styles.fonts.main}>
-      <Label cl={styles.colors.textBlack}>Email</Label>
+    <StyledContainer font={styles.fonts.main}>
+      <StyledLabel cl={styles.colors.textBlack}>Email</StyledLabel>
       <br />
       <br />
-      <MessageIconContainer>
+      <StyledMessageIconContainer>
         <MessageIcon size="1.5rem" />
-      </MessageIconContainer>
-      <Input
+      </StyledMessageIconContainer>
+      <StyledInput
         // value={email}
         className={emailIsValid ? classes.valid : classes.invalid}
         onChange={emailHandler}
@@ -118,21 +119,21 @@ const Inputs = ({
       />
       <br />
       <br />
-      <Label cl={styles.colors.textBlack}>Password</Label>
+      <StyledLabel cl={styles.colors.textBlack}>Password</StyledLabel>
       <br />
       <br />
-      <Privacy
+      <StyledPrivacy
         onClick={() => {
           setPrivacy((state) => !state);
         }}
       >
         {!privacy ? <ShowIcon size="1.5rem" /> : <HideIcon size="1.5rem" />}
-      </Privacy>
-      <LockIconContainer>
+      </StyledPrivacy>
+      <StyledLockIconContainer>
         <LockIcon size="1.5rem" />
-      </LockIconContainer>
+      </StyledLockIconContainer>
 
-      <Input
+      <StyledInput
         onChange={passwordHandler}
         onBlur={passwordHandler}
         onFocus={passwordHandler}
@@ -145,13 +146,13 @@ const Inputs = ({
         <>
           <br />
           <br />
-          <Label cl={styles.colors.textBlack}>Nickname</Label>
+          <StyledLabel cl={styles.colors.textBlack}>Nickname</StyledLabel>
           <br />
           <br />
-          <UserIconContainer>
+          <StyledUserIconContainer>
             <UserIcon size="1.5rem" />
-          </UserIconContainer>
-          <Input
+          </StyledUserIconContainer>
+          <StyledInput
             className={nicknameIsValid ? classes.valid : classes.invalid}
             onChange={nicknameHandler}
             onBlur={nicknameHandler}
@@ -163,8 +164,18 @@ const Inputs = ({
       ) : (
         <></>
       )}
-    </Container>
+    </StyledContainer>
   );
+};
+
+Inputs.propTypes = {
+  setNickname: PropTypes.func,
+  nickname: PropTypes.string,
+  email: PropTypes.string.isRequired,
+  setEmail: PropTypes.func.isRequired,
+  password: PropTypes.string.isRequired,
+  setPassword: PropTypes.func.isRequired,
+  showNickname: PropTypes.bool,
 };
 
 export default Inputs;

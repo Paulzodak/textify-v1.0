@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styled from "styled-components";
 import "./Textify.css";
 
-const ContentArea = styled.div`
+const StyledContentArea = styled.div`
   text-align: center;
   margin: auto;
   position: absolute;
@@ -17,7 +17,7 @@ const ContentArea = styled.div`
   border-left: 2px solid #0095a9ff;
   border-right: 2px solid #0095a9ff;
 `;
-const Container = styled.div`
+const StyledContainer = styled.div`
   position: fixed;
   top: 0rem;
   width: 100vw;
@@ -25,11 +25,11 @@ const Container = styled.div`
   height: 100vh;
   background-color: #00000000;
 `;
-const Text = styled.span``;
+const StyledText = styled.span``;
 const Textify = ({ size, top, left }) => {
   return (
-    <Container>
-      <ContentArea size={size} top={top} left={left}>
+    <StyledContainer>
+      <StyledContentArea size={size} top={top} left={left}>
         <motion.div
           className="box"
           animate={{
@@ -156,8 +156,8 @@ const Textify = ({ size, top, left }) => {
         >
           Y
         </motion.div>
-      </ContentArea>
-    </Container>
+      </StyledContentArea>
+    </StyledContainer>
   );
 };
 

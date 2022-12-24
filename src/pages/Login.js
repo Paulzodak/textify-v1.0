@@ -5,7 +5,7 @@ import Hero from "../images/hero.svg";
 import { useSelector, useDispatch } from "react-redux";
 import Inputs from "../components/Form/Inputs";
 import { motion } from "framer-motion";
-import { SignInBtn } from "../UI/Buttons";
+import { StyledSignInBtn } from "../UI/Buttons";
 import "./Login.css";
 import { setCurrentUser } from "../redux/user";
 import { signOut } from "firebase/auth";
@@ -17,28 +17,30 @@ import {
 import { collection, addDoc } from "firebase/firestore";
 import { auth } from "../components/firebase";
 import { useNavigate } from "react-router-dom";
-import { ContentArea } from "../UI/signLoginGlobal";
-import { HeroImg } from "../UI/signLoginGlobal";
-import { Container } from "../UI/signLoginGlobal";
-import { H1 } from "../UI/signLoginGlobal";
-import { P } from "../UI/signLoginGlobal";
+
+import { StyledContentArea } from "../UI/signLoginGlobal";
+import { StyledHeroImg } from "../UI/signLoginGlobal";
+import { StyledContainer } from "../UI/signLoginGlobal";
+import { StyledH1 } from "../UI/signLoginGlobal";
+import { StyledP } from "../UI/signLoginGlobal";
+
 import { db } from "../components/firebase";
 import Textify from "../components/LoadingTheme/Textify";
 
-const Hello = styled.h1`
+const StyledHello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
 `;
-const Welcome = styled.h2`
+const StyledWelcome = styled.h2`
   color: ${(props) => props.cl};
   margin: 0;
   font-weight: 500;
 `;
-const Form = styled.form`
+const StyledForm = styled.form`
   margin: 3rem 0 0 0;
 `;
 
-const ForgotPassword = styled.p`
+const StyledForgotPassword = styled.p`
   float: right;
   color: ${({ cl }) => cl};
   margin: 1rem 0;
@@ -109,39 +111,44 @@ const Login = () => {
         repeatDelay: 1,
       }}
     >
-      <Container font={styles.fonts.main}>
+      <StyledContainer font={styles.fonts.main}>
         {loading ? <Textify size="1rem" top="40%" left="25%" /> : null}
-        <HeroImg src={Hero} />
-        <ContentArea>
-          <Hello cl={styles.colors.textBlack}>Hello!</Hello>
-          <Welcome cl={styles.colors.textGrey}>Welcome back!</Welcome>
-          <Form>
+        <StyledHeroImg src={Hero} />
+        <StyledContentArea>
+          <StyledHello cl={styles.colors.textBlack}>Hello!</StyledHello>
+          <StyledWelcome cl={styles.colors.textGrey}>
+            Welcome back!
+          </StyledWelcome>
+          <StyledForm>
             <Inputs
               email={email}
               setEmail={setEmail}
               password={password}
               setPassword={setPassword}
             />
-            <ForgotPassword cl={styles.colors.mainGreen}>
+            <StyledForgotPassword cl={styles.colors.mainGreen}>
               Forgot Password?
-            </ForgotPassword>
-            <SignInBtn
+            </StyledForgotPassword>
+            <StyledSignInBtn
               valid={formIsValid}
               onClick={login}
               colors={styles.colors}
               disabled={!formIsValid}
             >
               Sign In
-            </SignInBtn>
-          </Form>
-        </ContentArea>
-        <H1>
+            </StyledSignInBtn>
+          </StyledForm>
+        </StyledContentArea>
+        <StyledH1>
           Don't have an account? &nbsp;
-          <P onClick={() => navigate("/Register")} cl={styles.colors.mainGreen}>
+          <StyledP
+            onClick={() => navigate("/Register")}
+            cl={styles.colors.mainGreen}
+          >
             Sign up
-          </P>
-        </H1>
-      </Container>
+          </StyledP>
+        </StyledH1>
+      </StyledContainer>
     </motion.div>
   );
 };

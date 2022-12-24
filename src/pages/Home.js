@@ -10,7 +10,7 @@ import { getDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { useEffect } from "react";
 
-const Header = styled.header`
+const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
 `;

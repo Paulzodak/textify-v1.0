@@ -1,5 +1,6 @@
 import styled from "styled-components";
-export const SignInBtn = styled.button`
+import { PropTypes } from "prop-types";
+export const StyledSignInBtn = styled.button`
   width: 100%;
   height: 3rem;
   background-color: ${({ colors, valid }) =>
@@ -17,3 +18,9 @@ export const SignInBtn = styled.button`
       valid ? colors.darkMainGreen : null};
   }
 `;
+StyledSignInBtn.propTypes = {
+  colors: PropTypes.object.isRequired,
+  onclick: PropTypes.func,
+  disabled: PropTypes.bool,
+  valid: PropTypes.bool,
+};
