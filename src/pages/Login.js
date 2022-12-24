@@ -23,6 +23,7 @@ import { Container } from "../UI/signLoginGlobal";
 import { H1 } from "../UI/signLoginGlobal";
 import { P } from "../UI/signLoginGlobal";
 import { db } from "../components/firebase";
+import Textify from "../components/LoadingTheme/Textify";
 
 const Hello = styled.h1`
   color: ${({ cl }) => cl};
@@ -52,6 +53,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
+  const [loading, setLoading] = useState(false);
   // console.log(email);
   // console.log(password);
   onAuthStateChanged(auth, (user) => {
@@ -76,13 +78,19 @@ const Login = () => {
     }
   }, [email, password]);
   const login = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        alert("Successful, You can now proceed to Login!");
-        navigate("/");
-      })
-      .catch((res) => alert(res.message));
+    setTimeout(() => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+          setLoading(false);
+          // navigate("/");
+        })
+        .catch((res) => {
+          setLoading(false);
+          alert(res.message);
+        });
+    }, 2000);
   };
 
   return (
@@ -102,6 +110,7 @@ const Login = () => {
       }}
     >
       <Container font={styles.fonts.main}>
+        {loading ? <Textify size="1rem" top="40%" left="25%" /> : null}
         <HeroImg src={Hero} />
         <ContentArea>
           <Hello cl={styles.colors.textBlack}>Hello!</Hello>

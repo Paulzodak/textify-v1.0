@@ -29,6 +29,7 @@ import { db } from "../components/firebase";
 
 import { setDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
+import Textify from "../components/LoadingTheme/Textify";
 
 const Hello = styled.h1`
   color: ${({ cl }) => cl};
@@ -61,6 +62,8 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
+  const [checkboxIsChecked, setCheckBoxIsChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
   console.log(nickname);
   useEffect(() => {
     if (
@@ -68,22 +71,22 @@ const Register = () => {
       email.includes("@") &&
       email.includes(".com") &&
       password.length > 5 &&
-      nickname.length > 5
+      nickname.length > 5 &&
+      checkboxIsChecked
     ) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
-  }, [email, password, nickname]);
-
-  console.log(email);
-  console.log(password);
-
+  }, [email, password, nickname, checkboxIsChecked]);
+  const checkboxHandler = (e) => setCheckBoxIsChecked(e.target.checked);
   const signup = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
+        setLoading(false);
         const docRef = doc(db, "users", res.user.uid);
         const data = { email: email, name: nickname, uid: res.user.uid };
 
@@ -91,7 +94,10 @@ const Register = () => {
         alert("Successful, You can now proceed to Login!");
         navigate("/");
       })
-      .catch((res) => alert(res.message));
+      .catch((res) => {
+        setLoading(false);
+        alert(res.message);
+      });
   };
 
   return (
@@ -111,6 +117,7 @@ const Register = () => {
       }}
     >
       <Container font={styles.fonts.main}>
+        {loading ? <Textify size="1rem" top="40%" left="25%" /> : null}
         <HeroImg src={Hero} />
         <ContentArea>
           <Hello cl={styles.colors.textBlack}>Welcome!</Hello>
@@ -126,7 +133,11 @@ const Register = () => {
               setPassword={setPassword}
             />
             <Box>
-              <Checkbox cl={styles.colors.mainGreen} type="checkbox" />
+              <Checkbox
+                onChange={checkboxHandler}
+                cl={styles.colors.mainGreen}
+                type="checkbox"
+              />
               <Terms>
                 I agree with
                 <P cl={styles.colors.mainGreen}> Terms & Conditions</P>

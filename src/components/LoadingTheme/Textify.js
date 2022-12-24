@@ -5,13 +5,31 @@ import "./Textify.css";
 
 const ContentArea = styled.div`
   text-align: center;
-  margin: 4rem;
+  margin: auto;
+  position: absolute;
+  top: ${({ top }) => top};
+  left: ${({ left }) => left};
+  font-size: ${({ size }) => size};
+  /* color: #0095a9ff; */
+  /* color: #ebfdffff; */
+  color: #00bdd6ff;
+  /* box-shadow: 0px 0px 1px grey; */
+  border-left: 2px solid #0095a9ff;
+  border-right: 2px solid #0095a9ff;
+`;
+const Container = styled.div`
+  position: fixed;
+  top: 0rem;
+  width: 100vw;
+  z-index: 10;
+  height: 100vh;
+  background-color: #00000000;
 `;
 const Text = styled.span``;
-const Textify = () => {
+const Textify = ({ size, top, left }) => {
   return (
-    <div>
-      <ContentArea>
+    <Container>
+      <ContentArea size={size} top={top} left={left}>
         <motion.div
           className="box"
           animate={{
@@ -24,7 +42,7 @@ const Textify = () => {
             ease: "easeInOut",
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
-            delay: 1,
+            delay: 0,
             // repeatDelay: 1,
           }}
         >
@@ -42,7 +60,7 @@ const Textify = () => {
             ease: "easeInOut",
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
-            delay: 1.2,
+            delay: 0.2,
             // repeatDelay: 1,
           }}
         >
@@ -60,7 +78,7 @@ const Textify = () => {
             ease: "easeInOut",
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
-            delay: 1.4,
+            delay: 0.4,
             // repeatDelay: 1,
           }}
         >
@@ -78,7 +96,7 @@ const Textify = () => {
             ease: "easeInOut",
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
-            delay: 1.6,
+            delay: 0.6,
             // repeatDelay: 1,
           }}
         >
@@ -97,7 +115,7 @@ const Textify = () => {
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
             // repeatDelay: 1,
-            delay: 1.8,
+            delay: 0.8,
           }}
         >
           I
@@ -115,7 +133,7 @@ const Textify = () => {
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
             // repeatDelay: 1,
-            delay: 2,
+            delay: 1,
           }}
         >
           F
@@ -133,13 +151,13 @@ const Textify = () => {
             // times: [0, 0.2, 0.5, 0.8, 1],
             repeat: Infinity,
             // repeatDelay: 1,
-            delay: 2.2,
+            delay: 1.2,
           }}
         >
           Y
         </motion.div>
       </ContentArea>
-    </div>
+    </Container>
   );
 };
 

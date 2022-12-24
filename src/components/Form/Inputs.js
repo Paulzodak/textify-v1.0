@@ -21,7 +21,7 @@ const Input = styled.input`
   border: none;
   /* background-color: ${({ colors }) => colors.lightBgGreen}; */
   font-size: 1.1rem;
-  padding: 0 0 0 3rem;
+  padding: 0.3rem 0 0 3rem;
   box-sizing: border-box;
   font-family: inherit;
   border-radius: 0.3rem;
@@ -34,7 +34,7 @@ const Label = styled.label`
 `;
 const Privacy = styled.div`
   position: absolute;
-  top: 9.3rem;
+  top: 9.5rem;
   right: 2rem;
 `;
 const UserIconContainer = styled.div`
@@ -44,12 +44,12 @@ const UserIconContainer = styled.div`
 `;
 const MessageIconContainer = styled.div`
   position: absolute;
-  top: 3rem;
+  top: 3.2rem;
   left: 1rem;
 `;
 const LockIconContainer = styled.div`
   position: absolute;
-  top: 9.3rem;
+  top: 9.5rem;
   left: 1rem;
 `;
 const Inputs = ({
