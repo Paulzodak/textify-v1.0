@@ -32,7 +32,7 @@ const StyledRow_3 = styled.div`
   box-sizing: border-box;
 `;
 const StyledUsername = styled.div`
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: ${({ cl }) => cl};
 `;
 const StyledLastMsg = styled.div`
