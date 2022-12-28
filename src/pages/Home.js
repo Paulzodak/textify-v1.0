@@ -131,9 +131,10 @@ const Home = () => {
         {/* <div>Home</div> */}
         <Utility />
         <ChatList mountChat={mountChats} />
+        <button onClick={signout}>signout</button>
         <HomeNav />
-        {/* <button onClick={signout}>signout</button>
-      <br />
+
+        {/*  <br />
       <br />
       <br />
       <Inputs />

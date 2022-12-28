@@ -10,7 +10,7 @@ const StyledContainer = styled(motion.div)`
   padding: 1rem 1rem 0 1rem;
   border-bottom: 1px solid ${({ bd }) => bd};
   position: sticky;
-  /* border: 1px solid grey; */
+
   background-color: white;
   width: 100%;
   top: 0rem;
@@ -55,8 +55,9 @@ const Utility = () => {
     <>
       <StyledContainer
         bd={colors.bgGrey}
+        bg={colors.lightBgGreen}
         initial={{ y: -20 }}
-        animate={{ y: showNav ? 0 : -100 }}
+        animate={{ y: showNav ? 0 : -150 }}
         exit={{ y: -20 }}
         transition={{ type: "spring", stiffness: 200, damping: 100, mass: 5 }}
       >

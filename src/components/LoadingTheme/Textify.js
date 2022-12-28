@@ -2,8 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import "./Textify.css";
-
-const StyledContentArea = styled.div`
+import PropTypes from "prop-types";
+const StyledContentArea = styled(motion.div)`
   text-align: center;
   margin: auto;
   position: absolute;
@@ -26,10 +26,19 @@ const StyledContainer = styled.div`
   background-color: #00000000;
 `;
 const StyledText = styled.span``;
+
 const Textify = ({ size, top, left }) => {
   return (
     <StyledContainer>
-      <StyledContentArea size={size} top={top} left={left}>
+      <StyledContentArea
+        transition={{ type: "spring", stiffness: 500, damping: 50, mass: 1 }}
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -10, opacity: 0 }}
+        size={size}
+        top={top}
+        left={left}
+      >
         <motion.div
           className="box"
           animate={{
@@ -159,6 +168,11 @@ const Textify = ({ size, top, left }) => {
       </StyledContentArea>
     </StyledContainer>
   );
+};
+Textify.propTypes = {
+  size: PropTypes.string.isRequired,
+  top: PropTypes.string.isRequired,
+  left: PropTypes.string.isRequired,
 };
 
 export default Textify;
