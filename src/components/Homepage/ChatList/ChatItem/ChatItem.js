@@ -35,22 +35,22 @@ const StyledRow_3 = styled.div`
   box-sizing: border-box;
 `;
 const StyledUsername = styled.div`
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   color: ${({ cl }) => cl};
 `;
 const StyledLastMsg = styled.div`
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   vertical-align: text-bottom;
   color: ${({ cl }) => cl};
 `;
 
 const StyledDay = styled.div`
   color: ${({ cl }) => cl};
-  font-size: 0.7rem;
+  font-size: 0.9rem;
 `;
 
 const StyledUserImage = styled.img`
-  width: 3rem;
+  width: 3.5rem;
 `;
 
 const StyledActive = styled.div`
