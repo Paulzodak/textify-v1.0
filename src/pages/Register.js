@@ -87,9 +87,18 @@ const Register = () => {
       .then((res) => {
         setLoading(false);
         const docRef = doc(db, "users", res.user.uid);
-        const data = { email: email, name: nickname, uid: res.user.uid };
-
+        const data = {
+          email: email,
+          name: nickname,
+          uid: res.user.uid,
+          chats: [],
+          isActive: false,
+        };
         setDoc(docRef, data);
+
+        // const docRef2 = doc(db, "users", res.user.uid, "chats", "chats");
+
+        // setDoc(docRef2, data);
         alert("Successful, You can now proceed to Login!");
         navigate("/");
       })
