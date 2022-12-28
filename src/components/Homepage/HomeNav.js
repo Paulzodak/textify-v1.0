@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 const StyledNav = styled(motion.nav)`
   position: fixed;
-  bottom: 0rem;
+  bottom: -0.1rem;
   height: 3.5rem;
   /* border: 1px solid red; */
   padding: 0.25rem 0rem;

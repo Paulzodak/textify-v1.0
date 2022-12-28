@@ -16,7 +16,10 @@ const Empty = styled.div`
 `;
 const StyledRow_1 = styled.div`
   text-align: center;
+  position: relative;
+  top: 0;
 `;
+
 const StyledRow_2 = styled.div`
   display: grid;
   grid-template-rows: 50% 50%;
@@ -47,25 +50,49 @@ const StyledDay = styled.div`
 `;
 
 const StyledUserImage = styled.img`
-  width: 60%;
+  width: 3rem;
 `;
-const ChatItem = () => {
+
+const StyledActive = styled.div`
+  height: 0.6rem;
+  width: 0.6rem;
+  background-color: ${({ bg }) => bg};
+  position: absolute;
+  top: 60%;
+  left: 62%;
+  border-radius: 100%;
+  border: 0.1rem solid white;
+`;
+const ChatItem = ({ item }) => {
   const { textGrey } = useSelector((state) => state.styles.colors);
   const { textBlack } = useSelector((state) => state.styles.colors);
-  console.log(textGrey);
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
+  console.log(item);
   return (
     <>
       <StyledContainer>
         <StyledRow_1>
           <StyledUserImage src={userImage} />
+          <StyledActive bg={currentUser.isActive ? "#1dd75bff" : "grey"} />
         </StyledRow_1>
         <StyledRow_2>
-          <StyledUsername cl={textBlack}>Jane Cooper</StyledUsername>
-          <StyledLastMsg cl={textGrey}> Thanks you are welcome</StyledLastMsg>
+          <StyledUsername cl={textBlack}>{item.username}</StyledUsername>
+          {item.messages.map((item, index) => {
+            if (index === 0) {
+              return (
+                <StyledLastMsg cl={textGrey}>{item.message}</StyledLastMsg>
+              );
+            }
+          })}
         </StyledRow_2>
         <StyledRow_3>
           <Empty />
-          <StyledDay cl={textGrey}>Mon</StyledDay>
+          {item.messages.map((item, index) => {
+            if (index === 0) {
+              return <StyledDay cl={textGrey}>{item.createdAt}</StyledDay>;
+            }
+          })}
         </StyledRow_3>
       </StyledContainer>
     </>

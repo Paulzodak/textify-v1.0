@@ -13,6 +13,7 @@ const Input = styled.input`
   background-color: ${({ bg }) => bg};
   border: none;
   border-radius: 0.5rem;
+  box-sizing: border-box;
   position: relative;
   padding-left: 2.5rem;
   &::placeholder {

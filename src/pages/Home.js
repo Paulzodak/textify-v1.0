@@ -16,24 +16,35 @@ import { func } from "prop-types";
 import { async } from "@firebase/util";
 import { setChats } from "../redux/user";
 import ChatList from "../components/Homepage/ChatList/ChatList";
-
+import Utility from "../components/Homepage/Utility/Utility";
+import Textify from "../components/LoadingTheme/Textify";
+import ChatItemSkeleton from "../components/Homepage/ChatList/ChatItem/ChatItemSkeleton";
+import { setActive } from "../redux/user";
+import { updateDoc } from "firebase/firestore";
+import { onSnapshot } from "firebase/firestore";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
 `;
 const Inputs = styled.input``;
+const Container = styled.div`
+  max-width: 100vw;
+`;
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentUser } = useSelector((user) => user.user);
-  const { chats } = useSelector((user) => user.user);
+  const { currentUser } = useSelector((state) => state.user);
+  const { chats } = useSelector((state) => state.user);
+  const [mountChats, setMountChats] = useState(false);
   console.log(chats);
+  console.log(currentUser);
   const signout = async () => {
     await signOut(auth);
     console.log("s");
   };
 
+  useEffect(() => {}, []);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -42,9 +53,23 @@ const Home = () => {
           dispatch(setCurrentUser({ currentUser: res.data() }));
           console.log(res.data());
           dispatch(setChats({ chats: res.data().chats }));
+
+          setMountChats(true);
+          dispatch(setActive({ isActive: true }));
+
+          // SET ACTIVENESS IN THE DB
+          setTimeout(() => {
+            const docRef = doc(db, "users", user.uid);
+            const data = { isActive: true };
+            console.log("updated");
+            updateDoc(docRef, data)
+              .then((res) => console.log(res))
+              .catch((res) => console.log(res));
+          }, 1000);
         });
       } else {
         navigate("/");
+        dispatch(setActive({ isActive: false }));
       }
     });
     // const docRef = doc(db, "users", currentUser.uid);
@@ -102,10 +127,12 @@ const Home = () => {
 
   return (
     <>
-      {/* <div>Home</div> */}
-      <ChatList />
-      <HomeNav />
-      {/* <button onClick={signout}>signout</button>
+      <Container>
+        {/* <div>Home</div> */}
+        <Utility />
+        <ChatList mountChat={mountChats} />
+        <HomeNav />
+        {/* <button onClick={signout}>signout</button>
       <br />
       <br />
       <br />
@@ -118,6 +145,7 @@ const Home = () => {
       <button onClick={createChat}>create chat</button>
       <br />
       <button onClick={createMessage}>create Message</button> */}
+      </Container>
     </>
   );
 };

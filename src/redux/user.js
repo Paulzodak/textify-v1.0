@@ -4,7 +4,12 @@ export const userSlice = createSlice({
   name: "user",
   initialState: {
     currentUser: "",
-    chats: {},
+    chats: [
+      { id: Math.random() * 1 },
+      { id: Math.random() * 2 },
+      { id: Math.random() * 3 },
+      { id: Math.random() * 4 },
+    ],
   },
   reducers: {
     setCurrentUser: (state, action) => {
@@ -20,7 +25,10 @@ export const userSlice = createSlice({
     addMessage: (state, action) => {
       state.chats.action.payload.receiverId.push(action.payload.newMessageObj);
     },
+    setActive: (state, action) => {
+      state.currentUser.isActive = action.payload.isActive;
+    },
   },
 });
-export const { setChats, setCurrentUser } = userSlice.actions;
+export const { setChats, setCurrentUser, setActive } = userSlice.actions;
 export default userSlice.reducer;
