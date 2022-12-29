@@ -22,6 +22,7 @@ import ChatItemSkeleton from "../components/Homepage/ChatList/ChatItem/ChatItemS
 import { setActive } from "../redux/user";
 import { updateDoc } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
+import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -29,6 +30,41 @@ const StyledHeader = styled.header`
 const Inputs = styled.input``;
 const Container = styled.div`
   max-width: 100vw;
+`;
+const StyledAddUser = styled.div`
+  border-radius: 100%;
+  /* background-color: #00bdd6ff; */
+  /* height: 10rem; */
+  /* width: 10rem; */
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  display: inline-block;
+  padding: 0.7rem;
+  box-shadow: 0px 0px 10px #95b0b6;
+  /* background-image: linear-gradient(
+    to right top,
+    #00bdd6,
+    #04a2b7,
+    #06889a,
+    #076f7d,
+    #075762
+  ); */
+  background-image: linear-gradient(
+    to right top,
+    #00d1ed,
+    #00c5e0,
+    #00bad3,
+    #00aec6,
+    #00a3b9,
+    #0098ac,
+    #008d9f,
+    #008293,
+    #007483,
+    #006774,
+    #005a65,
+    #004d57
+  );
 `;
 
 const Home = () => {
@@ -132,6 +168,10 @@ const Home = () => {
         <Utility />
         <ChatList mountChat={mountChats} />
         <button onClick={signout}>signout</button>
+        <br />
+        <StyledAddUser>
+          <AddUserIcon color="white" size="2.5rem" />
+        </StyledAddUser>
         <HomeNav />
 
         {/*  <br />
