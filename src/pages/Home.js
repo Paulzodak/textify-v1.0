@@ -23,6 +23,7 @@ import { setActive } from "../redux/user";
 import { updateDoc } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
 import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
+
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -73,9 +74,18 @@ const Home = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { chats } = useSelector((state) => state.user);
   const [mountChats, setMountChats] = useState(false);
+
   console.log(chats);
   console.log(currentUser);
   const signout = async () => {
+    dispatch(setActive({ isActive: false }));
+    const docRef = doc(db, "users", currentUser.uid);
+    const data = { isActive: false };
+    console.log("updated");
+    updateDoc(docRef, data)
+      .then((res) => console.log(res))
+      .catch((res) => console.log(res));
+    navigate("/");
     await signOut(auth);
     console.log("s");
   };
@@ -104,10 +114,17 @@ const Home = () => {
           }, 1000);
         });
       } else {
+        // dispatch(setActive({ isActive: false }));
+        // const docRef = doc(db, "users", currentUser.uid);
+        // const data = { isActive: false };
+        // console.log("updated");
+        // updateDoc(docRef, data)
+        //   .then((res) => console.log(res))
+        //   .catch((res) => console.log(res));
         navigate("/");
-        dispatch(setActive({ isActive: false }));
       }
     });
+
     // const docRef = doc(db, "users", currentUser.uid);
     // getDoc(docRef).then((res) => {
     //   dispatch(setCurrentUser({ currentUser: res.data() }));
@@ -172,6 +189,7 @@ const Home = () => {
         <StyledAddUser>
           <AddUserIcon color="white" size="2.5rem" />
         </StyledAddUser>
+
         <HomeNav />
 
         {/*  <br />
