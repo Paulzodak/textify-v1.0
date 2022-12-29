@@ -78,6 +78,7 @@ const Home = () => {
   console.log(chats);
   console.log(currentUser);
   const signout = async () => {
+    await signOut(auth);
     dispatch(setActive({ isActive: false }));
     const docRef = doc(db, "users", currentUser.uid);
     const data = { isActive: false };
@@ -86,11 +87,10 @@ const Home = () => {
       .then((res) => console.log(res))
       .catch((res) => console.log(res));
     navigate("/");
-    await signOut(auth);
+
     console.log("s");
   };
 
-  useEffect(() => {}, []);
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -121,7 +121,7 @@ const Home = () => {
         // updateDoc(docRef, data)
         //   .then((res) => console.log(res))
         //   .catch((res) => console.log(res));
-        navigate("/");
+        // navigate("/");
       }
     });
 
