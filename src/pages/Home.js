@@ -23,7 +23,11 @@ import { setActive } from "../redux/user";
 import { updateDoc } from "firebase/firestore";
 import { onSnapshot } from "firebase/firestore";
 import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
-
+import { AnimatePresence, motion } from "framer-motion";
+import People from "../components/People/People";
+import SearchTest from "../components/SearchTest";
+import Chat from "../components/Homepage/Chat/Chat";
+import { setMountChats } from "../redux/home";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -31,26 +35,18 @@ const StyledHeader = styled.header`
 const Inputs = styled.input``;
 const Container = styled.div`
   max-width: 100vw;
+  /* background-color: black; */
 `;
-const StyledAddUser = styled.div`
+const StyledAddUser = styled(motion.div)`
   border-radius: 100%;
-  /* background-color: #00bdd6ff; */
-  /* height: 10rem; */
-  /* width: 10rem; */
   position: fixed;
+  z-index: -10;
   bottom: 5rem;
   right: 1.5rem;
   display: inline-block;
-  padding: 0.7rem;
+  padding: 1rem;
   box-shadow: 0px 0px 10px #95b0b6;
-  /* background-image: linear-gradient(
-    to right top,
-    #00bdd6,
-    #04a2b7,
-    #06889a,
-    #076f7d,
-    #075762
-  ); */
+
   background-image: linear-gradient(
     to right top,
     #00d1ed,
@@ -73,7 +69,14 @@ const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const { chats } = useSelector((state) => state.user);
-  const [mountChats, setMountChats] = useState(false);
+  // const [mountChats, setMountChats] = useState(false);
+  // const [showChatsPage, setShowChatsPage] = useState(true);
+  // const [showPeoplePage, setShowPeoplePage] = useState(false);
+  // const [showChat, setShowChat] =     useState(false);
+
+  const { mountChats } = useSelector((state) => state.home.layout);
+  const { showPeoplePage } = useSelector((state) => state.home.layout);
+  const { showChatsPage } = useSelector((state) => state.home.layout);
 
   console.log(chats);
   console.log(currentUser);
@@ -100,7 +103,7 @@ const Home = () => {
           console.log(res.data());
           dispatch(setChats({ chats: res.data().chats }));
 
-          setMountChats(true);
+          dispatch(setMountChats({ mountChats: true }));
           dispatch(setActive({ isActive: true }));
 
           // SET ACTIVENESS IN THE DB
@@ -131,9 +134,14 @@ const Home = () => {
     //   console.log(res.data());
     // });
   }, []);
-  useEffect(() => {
-    console.log(currentUser);
-  }, [currentUser, dispatch]);
+
+  // useEffect(() => {
+  //   const userDocRef = doc(db, "users", currentUser.uid);
+  //   onSnapshot(userDocRef, (snapshot) => {
+  //     console.log(snapshot.data());
+  //   });
+  //   console.log(currentUser);
+  // }, [currentUser]);
 
   const getMessage = (e) => {
     const docRef2 = doc(db, "users", currentUser.uid);
@@ -182,29 +190,53 @@ const Home = () => {
     <>
       <Container>
         {/* <div>Home</div> */}
-        <Utility />
-        <ChatList mountChat={mountChats} />
-        <button onClick={signout}>signout</button>
-        <br />
-        <StyledAddUser>
-          <AddUserIcon color="white" size="2.5rem" />
-        </StyledAddUser>
+        {/* {showChat && <Chat />} */}
 
-        <HomeNav />
-
-        {/*  <br />
-      <br />
-      <br />
-      <Inputs />
-      <br />
-      <button onClick={getChat}>get chat</button>
-      <br />
-      <button onClick={getMessage}>get message</button>
-      <br />
-      <button onClick={createChat}>create chat</button>
-      <br />
-      <button onClick={createMessage}>create Message</button> */}
+        <AnimatePresence>
+          {/*CONDITIONALLY RENDERED INDIVIDUALLY DUE TO EXIT ANIMATION CRITERIA */}
+          {/* {showChatsPage && <Utility key="utility" />} */}
+          {showPeoplePage && <People key="people" />}
+          {showChatsPage && <ChatList key="chatList" mountChats={mountChats} />}
+          {showChatsPage && (
+            <StyledAddUser
+              initial={{ x: "200%" }}
+              animate={{
+                x: "0%",
+                transition: {
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 100,
+                  mass: 20,
+                },
+              }}
+              exit={{ x: "200%", transition: { duration: 0.1 } }}
+              // transition={{
+              //   type: "spring",
+              //   stiffness: 500,
+              //   damping: 100,
+              //   mass: 20,
+              // }}
+              key="userIcon"
+            >
+              <AddUserIcon color="white" size="2.5rem" />
+            </StyledAddUser>
+          )}
+          <HomeNav key="Homenav" />
+        </AnimatePresence>
       </Container>
+
+      <button key="btn" onClick={signout}>
+        signOut
+      </button>
+      <button
+      // onClick={() => {
+      //   setShowChat(true);
+      // }}
+      >
+        show chat
+      </button>
+
+      <br />
     </>
   );
 };
