@@ -12,6 +12,7 @@ import classes from "./HomeNav.module.css";
 import { setActive } from "../../redux/user";
 import { useDispatch } from "react-redux";
 import { setShowChatsPage, setShowPeoplePage } from "../../redux/home";
+import { setShowChat } from "../../redux/home";
 const StyledNav = styled(motion.nav)`
   position: fixed;
   bottom: 0rem;
@@ -89,6 +90,7 @@ const HomeNav = () => {
   //   },[])
   const [navList, setNavList] = useState(dummyNavList);
   const setActiveNav = (index) => {
+    dispatch(setShowChat({ showChat: false }));
     console.log(index);
     switch (index) {
       case 0:
@@ -126,7 +128,13 @@ const HomeNav = () => {
   };
   console.log(navList);
   return (
-    <StyledNav>
+    <StyledNav
+      initial={{ x: -150 }}
+      animate={{
+        x: 0,
+      }}
+      exit={{ x: -150 }}
+    >
       {[...navList].map((item, index) => {
         return (
           <StyledNavItem

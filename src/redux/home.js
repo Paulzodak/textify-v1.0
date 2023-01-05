@@ -6,11 +6,13 @@ export const homeSlice = createSlice({
       showChatsPage: true,
       showPeoplePage: false,
       mountChats: false,
+      showChat: false,
+      showHomeNav: true,
     },
   },
   reducers: {
     setShowChatsPage: (state, action) => {
-      state.layout.showChatsPage = action.payload.showChatPage;
+      state.layout.showChatsPage = action.payload.showChatsPage;
     },
     setShowPeoplePage: (state, action) => {
       state.layout.showPeoplePage = action.payload.showPeoplePage;
@@ -18,8 +20,19 @@ export const homeSlice = createSlice({
     setMountChats: (state, action) => {
       state.layout.mountChats = action.payload.mountChats;
     },
+    setShowChat: (state, action) => {
+      state.layout.showChat = action.payload.showChat;
+    },
+    setShowHomeNav: (state, action) => {
+      state.layout.showHomeNav = action.payload.showHomeNav;
+    },
   },
 });
-export const { setMountChats, setShowChatsPage, setShowPeoplePage } =
-  homeSlice.actions;
+export const {
+  setShowHomeNav,
+  setShowChat,
+  setMountChats,
+  setShowChatsPage,
+  setShowPeoplePage,
+} = homeSlice.actions;
 export default homeSlice.reducer;

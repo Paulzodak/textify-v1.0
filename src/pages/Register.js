@@ -89,7 +89,7 @@ const Register = () => {
         const docRef = doc(db, "users", res.user.uid);
         const data = {
           email: email,
-          name: nickname,
+          nickname: nickname,
           uid: res.user.uid,
           chats: [],
           isActive: false,

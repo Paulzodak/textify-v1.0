@@ -1,105 +1,95 @@
 import React from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ChatItem from "./ChatItem/ChatItem";
 import ChatItemSkeleton from "./ChatItem/ChatItemSkeleton";
 import { AnimatePresence, motion } from "framer-motion";
-const ChatList = ({ mountChat }) => {
+import AddUser from "../../AddUsers/AddUser";
+import EmptyChats from "./EmptyChats.js";
+import Utility from "../Utility/Utility";
+
+import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
+const StyledContainer = styled(motion.div)``;
+const StyledAddUser = styled(motion.div)`
+  border-radius: 100%;
+  position: fixed;
+  bottom: 0rem;
+  right: 1.5rem;
+  display: inline-block;
+  padding: 1rem;
+  box-shadow: 0px 0px 10px #95b0b6;
+
+  background-image: linear-gradient(
+    to right top,
+    #00d1ed,
+    #00c5e0,
+    #00bad3,
+    #00aec6,
+    #00a3b9,
+    #0098ac,
+    #008d9f,
+    #008293,
+    #007483,
+    #006774,
+    #005a65,
+    #004d57
+  );
+`;
+const ChatList = ({ mountChats }) => {
   const { chats } = useSelector((state) => state.user);
+  const [showAddUser, setShowAddUser] = useState(true);
   console.log(chats);
   const container = {
     hidden: {
-      opacity: 1,
-      transition: {
-        x: 200,
-      },
+      opacity: 0,
     },
     show: {
       opacity: 1,
       transition: {
-        x: 0,
-        delayChildren: 0.5,
-        staggerDirection: -1,
+        staggerChildren: 0.2,
       },
     },
   };
 
   const items = {
-    hidden: { opacity: 0 },
-    show: { opacity: 1 },
+    hidden: { opacity: 0, x: -50 },
+    show: { opacity: 1, x: 0, transition: { duration: 0.8 } },
   };
   return (
-    <>
-      {/* <motion.ul variants={container} initial="hidden" animate="show">
-        <AnimatePresence>
-          <motion.li variants={items}>edede</motion.li>
-          <motion.li variants={items}>edede</motion.li>
-        </AnimatePresence>
-      </motion.ul> */}
-      {mountChat ? (
+    <StyledContainer
+      initial={{ x: "-100%" }}
+      animate={{ x: "0%", transition: { duration: 0.7, delay: 0.5 } }}
+      exit={{ x: "-100%", transition: { ease: "easeOut" } }}
+    >
+      <Utility />
+      {mountChats ? (
         <motion.div variants={container} initial="hidden" animate="show">
-          <AnimatePresence>
-            {[...chats].map((item) => {
-              return (
-                <motion.div
-                  key={item.id}
-                  // layout={true}
-                  // whileTap={{ scale: 1.1 }}
-                  // whileHover={{ x: 5 }}
-                  variants={items}
-                  // transition={{ ease: "easeInOut", duration: 2 }}
-                  // drag="x"
-                  // dragConstraints={{ left: -10, right: 10 }}
-                  // initial={{ x: 30, opacity: 0 }}
-                  // animate={{ x: 0, opacity: 1 }}
-                  // exit={{ x: 30, opacity: 0 }}
-                >
-                  <ChatItem item={item} />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+          {/* <AnimatePresence> */}
+          {[...chats].map((item) => {
+            // if (item.messages.length > 1) {
+            return (
+              <motion.div key={item.username} variants={items}>
+                <ChatItem item={item} />
+              </motion.div>
+            );
+            // }
+          })}
         </motion.div>
       ) : (
         <motion.div variants={container} initial="hidden" animate="show">
-          <AnimatePresence>
-            {[...chats].map((item) => {
-              return (
-                <motion.div
-                  key={item.id}
-                  // layout={true}
-                  // whileTap={{ scale: 1.1 }}
-                  // whileHover={{ x: 5 }}
-                  variants={items}
-
-                  // transition={{ ease: "easeOut", duration: 2 }}
-                  // drag="x"
-                  // dragConstraints={{ left: -10, right: 10 }}
-                  // initial={{ x: 30, opacity: 0 }}
-                  // animate={{ x: 0, opacity: 1 }}
-                  // exit={{ x: 30, opacity: 0 }}
-                >
-                  <ChatItemSkeleton item={item} />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+          {/* <AnimatePresence> */}
+          {[...chats].map((item) => {
+            return (
+              <motion.div key={item.id} variants={items}>
+                <ChatItemSkeleton item={item} />
+              </motion.div>
+            );
+          })}
         </motion.div>
       )}
-
-      {/* <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
-      <ChatItem /> */}
-    </>
+      <AnimatePresence> {chats.length < 1 && <EmptyChats />}</AnimatePresence>
+    </StyledContainer>
   );
 };
 

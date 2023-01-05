@@ -27,7 +27,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import People from "../components/People/People";
 import SearchTest from "../components/SearchTest";
 import Chat from "../components/Homepage/Chat/Chat";
-import { setMountChats } from "../redux/home";
+import { setMountChats, setShowHomeNav } from "../redux/home";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -69,14 +69,10 @@ const Home = () => {
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const { chats } = useSelector((state) => state.user);
-  // const [mountChats, setMountChats] = useState(false);
-  // const [showChatsPage, setShowChatsPage] = useState(true);
-  // const [showPeoplePage, setShowPeoplePage] = useState(false);
-  // const [showChat, setShowChat] =     useState(false);
-
   const { mountChats } = useSelector((state) => state.home.layout);
   const { showPeoplePage } = useSelector((state) => state.home.layout);
   const { showChatsPage } = useSelector((state) => state.home.layout);
+  const { showHomeNav } = useSelector((state) => state.home.layout);
 
   console.log(chats);
   console.log(currentUser);
@@ -221,7 +217,7 @@ const Home = () => {
               <AddUserIcon color="white" size="2.5rem" />
             </StyledAddUser>
           )}
-          <HomeNav key="Homenav" />
+          {showHomeNav && <HomeNav key="Homenav" />}
         </AnimatePresence>
       </Container>
 

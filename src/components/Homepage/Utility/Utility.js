@@ -5,12 +5,12 @@ import ChatSearch from "./ChatSearch";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+
 const StyledContainer = styled(motion.div)`
   /* height: 5rem; */
   padding: 1rem 1rem 0 1rem;
   border-bottom: 1px solid ${({ bd }) => bd};
-  position: sticky;
-
+  /* position: fixed; */
   background-color: white;
   width: 100%;
   top: 0rem;
@@ -39,12 +39,6 @@ const Utility = () => {
     setLastScroll(window.scrollY);
   };
   useEffect(() => {
-    // setTimeout(() => {
-    //   window.addEventListener("scroll", controlBar);
-    //   return () => {
-    //     window.removeEventListener("scroll", controlBar);
-    //   };
-    // }, 500);
     window.addEventListener("scroll", controlBar);
     return () => {
       window.removeEventListener("scroll", controlBar);
@@ -52,24 +46,33 @@ const Utility = () => {
   }, [lastScroll]);
 
   return (
-    <>
-      <StyledContainer
-        bd={colors.bgGrey}
-        bg={colors.lightBgGreen}
-        initial={{ y: -20 }}
-        animate={{ y: showNav ? 0 : -150 }}
-        exit={{ y: -20 }}
-        transition={{ type: "spring", stiffness: 200, damping: 100, mass: 5 }}
-      >
-        <Row_1>
-          <Messages>Messages</Messages>
-          <MenuIconContainer>
-            <MenuIcon size="1.5rem" />
-          </MenuIconContainer>
-        </Row_1>
-        <ChatSearch />
-      </StyledContainer>
-    </>
+    <StyledContainer
+      bd={colors.bgGrey}
+      bg={colors.lightBgGreen}
+      initial={{ opacity: 0, y: -150 }}
+      // animate={{ y: showNav ? 0 : -150 }}
+      animate={{
+        opacity: 1,
+        y: showNav ? 0 : -150,
+        transition: { delay: 1, duration: 0.7 },
+      }}
+      exit={{ opacity: 0, y: -150, transition: { duration: 0.2 } }}
+      // transition={{
+      //   duration: 0.2,
+      //   // type: "spring",
+      //   // stiffness: 300,
+      //   // damping: 100,
+      //   // mass: 5,
+      // }}
+    >
+      <Row_1>
+        <Messages>Messages</Messages>
+        <MenuIconContainer>
+          <MenuIcon size="1.5rem" />
+        </MenuIconContainer>
+      </Row_1>
+      <ChatSearch />
+    </StyledContainer>
   );
 };
 

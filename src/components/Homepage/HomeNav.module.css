@@ -1,0 +1,11 @@
+.nav_item {
+  color: #414650;
+}
+.active {
+  color: #00bdd6ff;
+  /* box-shadow: 0px 0px 1px #efefef; */
+  border-radius: 0.4rem;
+  background-color: #ebfdffff;
+
+  box-sizing: border-box;
+}
