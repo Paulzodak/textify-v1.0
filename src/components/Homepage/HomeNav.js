@@ -129,25 +129,24 @@ const HomeNav = () => {
   console.log(navList);
   return (
     <StyledNav
-      initial={{ x: -150 }}
+      initial={{ x: -100, opacity: 0 }}
       animate={{
         x: 0,
+        opacity: 1,
       }}
-      exit={{ x: -150 }}
+      exit={{ x: -100, opacity: 0 }}
     >
       {[...navList].map((item, index) => {
         return (
           <StyledNavItem
-            className={`${item.active ? classes.active : null} ${
-              classes.nav_item
-            }`}
+            className={`${item.active && classes.active} ${classes.nav_item}`}
             layout={true}
             key={item.id}
             onClick={() => setActiveNav(index)}
           >
             {item.Icon}
             <StyledName
-              className={item.active ? classes.active : null}
+              className={item.active && classes.active}
               color="inherit"
             >
               {item.name}

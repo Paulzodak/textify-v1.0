@@ -11,7 +11,7 @@ import { doc } from "firebase/firestore";
 import { useEffect } from "react";
 import { setCurrentUser } from "../redux/user";
 import { useDispatch, useSelector } from "react-redux";
-import { setDoc } from "firebase/firestore";
+import { setDoc, onSnapshot } from "firebase/firestore";
 import { func } from "prop-types";
 import { async } from "@firebase/util";
 import { setChats } from "../redux/user";
@@ -20,8 +20,7 @@ import Utility from "../components/Homepage/Utility/Utility";
 import Textify from "../components/LoadingTheme/Textify";
 import ChatItemSkeleton from "../components/Homepage/ChatList/ChatItem/ChatItemSkeleton";
 import { setActive } from "../redux/user";
-import { updateDoc } from "firebase/firestore";
-import { onSnapshot } from "firebase/firestore";
+import { updateDoc, collection, query } from "firebase/firestore";
 import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
 import { AnimatePresence, motion } from "framer-motion";
 import People from "../components/People/People";
@@ -93,25 +92,28 @@ const Home = () => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        const docRef = doc(db, "users", user.uid);
-        getDoc(docRef).then((res) => {
-          dispatch(setCurrentUser({ currentUser: res.data() }));
-          console.log(res.data());
-          dispatch(setChats({ chats: res.data().chats }));
+        const getData = () => {
+          const docRef = doc(db, "users", user.uid);
+          getDoc(docRef).then((res) => {
+            dispatch(setCurrentUser({ currentUser: res.data() }));
+            console.log(res.data());
+            dispatch(setChats({ chats: res.data().chats }));
 
-          dispatch(setMountChats({ mountChats: true }));
-          dispatch(setActive({ isActive: true }));
+            dispatch(setMountChats({ mountChats: true }));
+            dispatch(setActive({ isActive: true }));
 
-          // SET ACTIVENESS IN THE DB
-          setTimeout(() => {
-            const docRef = doc(db, "users", user.uid);
-            const data = { isActive: true };
-            console.log("updated");
-            updateDoc(docRef, data)
-              .then((res) => console.log(res))
-              .catch((res) => console.log(res));
-          }, 1000);
-        });
+            // SET ACTIVENESS IN THE DB
+            setTimeout(() => {
+              const docRef = doc(db, "users", user.uid);
+              const data = { isActive: true };
+              console.log("updated");
+              updateDoc(docRef, data)
+                .then((res) => console.log(res))
+                .catch((res) => console.log(res));
+            }, 1000);
+          });
+        };
+        getData();
       } else {
         // dispatch(setActive({ isActive: false }));
         // const docRef = doc(db, "users", currentUser.uid);
@@ -124,6 +126,23 @@ const Home = () => {
       }
     });
 
+    const colRef = collection(db, "users");
+    const q = query(colRef, currentUser.uid);
+    onSnapshot(q, () => {
+      // snapshot.docs.forEach((user) => {
+      // console.log(user.data());
+      const docRef = doc(db, "users", currentUser.uid);
+      getDoc(docRef).then((res) => {
+        console.log("reupdated");
+        dispatch(setCurrentUser({ currentUser: res.data() }));
+        console.log(res.data());
+        dispatch(setChats({ chats: res.data().chats }));
+
+        dispatch(setMountChats({ mountChats: true }));
+        dispatch(setActive({ isActive: true }));
+      });
+      // });
+    });
     // const docRef = doc(db, "users", currentUser.uid);
     // getDoc(docRef).then((res) => {
     //   dispatch(setCurrentUser({ currentUser: res.data() }));

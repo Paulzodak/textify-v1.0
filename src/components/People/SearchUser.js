@@ -12,6 +12,7 @@ import { setChatItemData } from "../../redux/people";
 import {
   setShowChatsPage,
   setShowPeoplePage,
+  setShowHomeNav,
   setShowChat,
 } from "../../redux/home";
 const StyledContainer = styled(motion.div)`
@@ -71,8 +72,8 @@ const SearchUser = ({ item }) => {
   useEffect(() => {}, []);
 
   const sendMessageHandler = () => {
-    // setShowChat(true);
     dispatch(setShowChat({ showChat: true }));
+    dispatch(setShowHomeNav({ showHomeNav: false }));
     console.log(searchedUser);
     const tempChats = [...searchedUser.chats];
     const currentUserTempChats = [...currentUser.chats];
@@ -89,6 +90,7 @@ const SearchUser = ({ item }) => {
             messages: [],
             email: currentUser.email,
             isActive: currentUser.isActive,
+            isTyping: false,
           });
 
           tempChats.map((chat) => {
@@ -122,6 +124,7 @@ const SearchUser = ({ item }) => {
             messages: [],
             email: searchedUser.email,
             isActive: searchedUser.isActive,
+            isTyping: false,
           });
 
           console.log("friend doesnt exist initially");
@@ -150,6 +153,7 @@ const SearchUser = ({ item }) => {
         messages: [],
         email: currentUser.email,
         isActive: currentUser.isActive,
+        isTyping: false,
       });
 
       const docRef = doc(db, "users", searchedUser.uid);
@@ -167,6 +171,7 @@ const SearchUser = ({ item }) => {
         messages: [],
         email: searchedUser.email,
         isActive: searchedUser.isActive,
+        isTyping: false,
       });
 
       const docRef = doc(db, "users", currentUser.uid);

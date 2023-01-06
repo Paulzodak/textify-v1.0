@@ -54,7 +54,7 @@ const Utility = () => {
       animate={{
         opacity: 1,
         y: showNav ? 0 : -150,
-        transition: { delay: 1, duration: 0.7 },
+        transition: { delay: 0.2, duration: 0.4 },
       }}
       exit={{ opacity: 0, y: -150, transition: { duration: 0.2 } }}
       // transition={{

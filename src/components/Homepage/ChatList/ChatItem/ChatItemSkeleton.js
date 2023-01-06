@@ -12,18 +12,20 @@ const StyledContainer = styled.div`
 const ChatItemSkeleton = () => {
   return (
     <StyledContainer>
-      <ContentLoader
-        speed={2}
-        // width={476}
-        height={44}
-        viewBox="0 0 476 44"
-        backgroundColor="#f3f3f3"
-        foregroundColor="#ecebeb"
-      >
-        <rect x="48" y="8" rx="3" ry="3" width="200" height="6" />
-        <rect x="48" y="26" rx="3" ry="3" width="200" height="6" />
-        <circle cx="20" cy="20" r="20" />
-      </ContentLoader>
+      <center>
+        <ContentLoader
+          speed={2}
+          // width={476}
+          height={44}
+          viewBox="0 0 476 44"
+          backgroundColor="#f3f3f3"
+          foregroundColor="#ecebeb"
+        >
+          <rect x="48" y="8" rx="3" ry="3" width="200" height="6" />
+          <rect x="48" y="26" rx="3" ry="3" width="200" height="6" />
+          <circle cx="20" cy="20" r="20" />
+        </ContentLoader>
+      </center>
     </StyledContainer>
 
     // <StyledContainerSkeleton>

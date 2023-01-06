@@ -10,7 +10,7 @@ import EmptyChats from "./EmptyChats.js";
 import Utility from "../Utility/Utility";
 
 import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
-const StyledContainer = styled(motion.div)``;
+const StyledContainer = styled.div``;
 const StyledAddUser = styled(motion.div)`
   border-radius: 100%;
   position: fixed;
