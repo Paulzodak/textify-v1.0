@@ -9,14 +9,27 @@ import { BsTelephone as PhoneIcon } from "react-icons/bs";
 import { BsCameraVideo as VideoIcon } from "react-icons/bs";
 import { PropTypes } from "prop-types";
 import { useDispatch } from "react-redux";
+import { setChats } from "../../../redux/user";
 import { setShowChat, setShowHomeNav } from "../../../redux/home";
-import { collection, query, onSnapshot, where } from "firebase/firestore";
+import {
+  collection,
+  query,
+  onSnapshot,
+  where,
+  setDoc,
+  doc,
+  updateDoc,
+  getDoc,
+} from "firebase/firestore";
 import { setChatItemData } from "../../../redux/people";
 import { db } from "../../firebase";
 import { CiLocationOn as LocationIcon } from "react-icons/ci";
 import { CiFaceSmile as SmileIcon } from "react-icons/ci";
 import { GoFileMedia as GalleryIcon } from "react-icons/go";
 import { AiOutlineSend as SendIcon } from "react-icons/ai";
+import useFetchActive from "../../../Hooks/useFetchActive";
+import useFetchisTyping from "../../../Hooks/useFetchisTyping";
+import useUpdateisTyping from "../../../Hooks/useUpdateisTyping";
 const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0rem;
@@ -102,24 +115,42 @@ const StyledInput = styled.input`
 
 const Chat = () => {
   const dispatch = useDispatch();
+
   const { bgGrey } = useSelector((state) => state.styles.colors);
+  const { currentUser } = useSelector((state) => state.user);
   const { textGrey } = useSelector((state) => state.styles.colors);
   const { mainGreen } = useSelector((state) => state.styles.colors);
   const { chatItemData } = useSelector((state) => state.people);
-  const [activeStatusForThisUser, setActiveStatusForThisUser] = useState(false);
-  console.log(chatItemData);
-  useEffect(() => {
-    const colRef = collection(db, "users");
+  const { chats } = useSelector((state) => state.user);
+  // const [activeStatusForThisUser, setActiveStatusForThisUser] = useState(false);
+  // const [isTyping, setIsTyping] = useState(false);
+  const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
+  const [userInput, setUserInput] = useState("");
+  const [userActiveStatus] = useFetchActive(chatItemData.uid);
+  const [userTypingStatus] = useFetchisTyping(
+    currentUser.uid,
+    chatItemData.uid
+  );
+  useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
 
-    const q = query(colRef, where("username", "==", chatItemData.username));
-    onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((user) => {
-        if (user.data().isActive === false) {
-        }
-        setActiveStatusForThisUser(user.data().isActive);
-      });
-    });
-  }, []);
+  useEffect(() => {
+    return () => {
+      let tempChats = [];
+      const docRef = doc(db, "users", chatItemData.uid);
+      getDoc(docRef)
+        .then((res) => {
+          tempChats = res.data().chats;
+          tempChats.map((user) => {
+            if (user.uid === currentUser.uid) {
+              user.isTyping = false;
+            }
+          });
+          const data = { chats: tempChats };
+          updateDoc(docRef, data);
+        })
+        .catch((err) => console.log(err));
+    };
+  }, [userInput]);
 
   const showChatHandler = () => {
     dispatch(setShowChat({ showChat: false }));
@@ -127,6 +158,13 @@ const Chat = () => {
   };
   const utilityIconSize = "1.5rem";
   const utilityIconColor = mainGreen;
+
+  const inputHandler = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  const sendMessageHandler = () => {};
+
   return (
     <StyledContainer
       initial={{ x: 500 }}
@@ -148,10 +186,14 @@ const Chat = () => {
             <BackIcon size="1.5rem" />
           </StyledBackIconContainer>
           <StyledProfileImage src={userImage} />
-          <div style={{ boerder: "1px solid red" }}>
+          <div>
             <StyledUsername>{chatItemData.username}</StyledUsername>
             <StyledActive cl={textGrey}>
-              {activeStatusForThisUser ? "Active now" : "Last seen recently"}
+              {userTypingStatus
+                ? "Typing..."
+                : userActiveStatus
+                ? "Active now"
+                : "Last seen recently"}
             </StyledActive>
           </div>
           <StyledIconContainer>
@@ -171,12 +213,18 @@ const Chat = () => {
           <SmileIcon color={utilityIconColor} size={utilityIconSize} />
           <GalleryIcon color={utilityIconColor} size={utilityIconSize} />
           <StyledInput
+            onChange={inputHandler}
+            value={userInput}
             textGrey={textGrey}
             placeholder="Aa"
             color={utilityIconColor}
             bg={bgGrey}
           />
-          <SendIcon color={utilityIconColor} size={utilityIconSize} />
+          <SendIcon
+            onClick={sendMessageHandler}
+            color={utilityIconColor}
+            size={utilityIconSize}
+          />
         </StyledUtilityContainer>
       </StyledSubContainer>
     </StyledContainer>
