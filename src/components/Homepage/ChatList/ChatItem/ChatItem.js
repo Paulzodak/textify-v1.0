@@ -96,8 +96,7 @@ const ChatItem = ({ item }) => {
   const { lightBgGreen } = useSelector((state) => state.styles.colors);
 
   const { currentUser } = useSelector((state) => state.user);
-  // const { searchedUser } = useSelector((state) => state.people);
-  // console.log(searchedUser);
+
   const { chatItemData } = useSelector((state) => state.people);
   const { showChat } = useSelector((state) => state.home.layout);
   const showChatHandler = () => {
@@ -105,10 +104,6 @@ const ChatItem = ({ item }) => {
     dispatch(setChatItemData({ chatItemData: item }));
     dispatch(setShowHomeNav({ showHomeNav: false }));
   };
-  console.log(chatItemData);
-  // const [showChat, setShowChat] = useState(false);
-  console.log(currentUser);
-  console.log(item);
 
   return (
     <>

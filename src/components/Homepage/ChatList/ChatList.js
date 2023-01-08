@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ChatItem from "./ChatItem/ChatItem";
@@ -39,7 +39,6 @@ const StyledAddUser = styled(motion.div)`
 const ChatList = ({ mountChats }) => {
   const { chats } = useSelector((state) => state.user);
   const [showAddUser, setShowAddUser] = useState(true);
-  console.log(chats);
   const container = {
     hidden: {
       opacity: 0,

@@ -83,15 +83,11 @@ const HomeNav = () => {
       active: false,
     },
   ];
-  //   useEffect(()=>{
-  //     navList.map((item)=>{
-  // if (item.id )
-  //     })
-  //   },[])
+
   const [navList, setNavList] = useState(dummyNavList);
   const setActiveNav = (index) => {
     dispatch(setShowChat({ showChat: false }));
-    console.log(index);
+
     switch (index) {
       case 0:
         dispatch(setShowPeoplePage({ showPeoplePage: false }));
@@ -126,7 +122,7 @@ const HomeNav = () => {
       return temp;
     });
   };
-  console.log(navList);
+
   return (
     <StyledNav
       initial={{ x: -100, opacity: 0 }}

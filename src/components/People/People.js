@@ -103,13 +103,8 @@ const People = () => {
   const { searchedUser } = useSelector((state) => state.people);
   const [searchInput, setSearchInput] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  // const [searchedUsers, setSearchedUsers] = useState([]);
 
-  // useEffect(() => {
-  //   dispatch(setSearchedUser({ searchedUser: {} }));
-  // }, []);
   const [showLoading, setShowLoading] = useState(true);
-  console.log(searchedUser);
 
   const handler = (e) => {
     setSearchInput(e.target.value);
@@ -124,14 +119,12 @@ const People = () => {
       if (snapshot.docs.length > 0) {
         setShowLoading(false);
         snapshot.docs.forEach((user) => {
-          console.log(user.data());
           dispatch(setSearchedUser({ searchedUser: user.data() }));
           // users.push(user.data());
         });
       } else {
         dispatch(setSearchedUser({ searchedUser: {} }));
       }
-      // console.log(users);
     });
 
     if (searchInput.length < 1) {

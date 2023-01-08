@@ -73,20 +73,20 @@ const Home = () => {
   const { showChatsPage } = useSelector((state) => state.home.layout);
   const { showHomeNav } = useSelector((state) => state.home.layout);
 
-  console.log(chats);
-  console.log(currentUser);
+  // console.log(chats);
+  // console.log(currentUser);
   const signout = async () => {
     await signOut(auth);
     dispatch(setActive({ isActive: false }));
     const docRef = doc(db, "users", currentUser.uid);
     const data = { isActive: false };
-    console.log("updated");
+    // console.log("updated");
     updateDoc(docRef, data)
       .then((res) => console.log(res))
       .catch((res) => console.log(res));
     navigate("/");
 
-    console.log("s");
+    // console.log("s");
   };
 
   useEffect(() => {
@@ -96,22 +96,22 @@ const Home = () => {
           const docRef = doc(db, "users", user.uid);
           getDoc(docRef).then((res) => {
             dispatch(setCurrentUser({ currentUser: res.data() }));
-            console.log(res.data());
+            // console.log(res.data());
             dispatch(setChats({ chats: res.data().chats }));
 
             dispatch(setMountChats({ mountChats: true }));
             dispatch(setActive({ isActive: true }));
 
             // SET ACTIVENESS IN THE DB
-            setTimeout(() => {
-              const docRef = doc(db, "users", user.uid);
-              const data = { isActive: true };
-              console.log("updated");
-              updateDoc(docRef, data)
-                .then((res) => console.log(res))
-                .catch((res) => console.log(res));
-            }, 1000);
-          });
+            // setTimeout(() => {
+            const docRef = doc(db, "users", user.uid);
+            const data = { isActive: true };
+            console.log("updated");
+            updateDoc(docRef, data)
+              .then((res) => console.log(res))
+              .catch((res) => console.log(res));
+          }, 1000);
+          // });
         };
         getData();
       } else {
@@ -127,15 +127,13 @@ const Home = () => {
     });
 
     const colRef = collection(db, "users");
-    const q = query(colRef, currentUser.uid);
+    const q = query(colRef);
     onSnapshot(q, () => {
-      // snapshot.docs.forEach((user) => {
-      // console.log(user.data());
       const docRef = doc(db, "users", currentUser.uid);
       getDoc(docRef).then((res) => {
-        console.log("reupdated");
+        // console.log("reupdated");
         dispatch(setCurrentUser({ currentUser: res.data() }));
-        console.log(res.data());
+        // console.log(res.data());
         dispatch(setChats({ chats: res.data().chats }));
 
         dispatch(setMountChats({ mountChats: true }));
@@ -148,8 +146,34 @@ const Home = () => {
     //   dispatch(setCurrentUser({ currentUser: res.data() }));
     //   console.log(res.data());
     // });
+
+    // const colRef2 = collection(db, "users");
+    // const q2 = query(colRef2);
+    // onSnapshot(q2, () => {
+    //   chats.map(() => {
+    //     const docRef = doc(db, "users", chats.uid);
+    //     getDoc(docRef).then((res) => {
+    //       console.log("reupdated 2");
+    //       console.log(res.data());
+    //       dispatch(setChats({ chats: res.data().chats }));
+    //     });
+    //   });
+
+    //   // });
+    // });
   }, []);
 
+  // CONSISTENTLY LISTEN TO FRIENDS DATA
+
+  // const colRef = collection(db, "users");
+  // const q = query(colRef);
+  // onSnapshot(q, () => {
+  //   const docRef = doc(db, "users", currentUser.uid);
+  //   getDoc(docRef).then((res) => {
+  //     dispatch(setChats({ chats: res.data().chats }));
+  //   });
+  //   // });
+  // });
   // useEffect(() => {
   //   const userDocRef = doc(db, "users", currentUser.uid);
   //   onSnapshot(userDocRef, (snapshot) => {
