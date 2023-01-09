@@ -8,7 +8,7 @@ const Container = styled.div`
 `;
 const Input = styled.input`
   width: 100%;
-  font-size: 0.9rem;
+  font-size: 1rem;
   height: 2rem;
   background-color: ${({ bg }) => bg};
   border: none;
@@ -20,7 +20,7 @@ const Input = styled.input`
     font-size: inherit;
   }
 `;
-
+const StyledForm = styled.form``;
 const SearchIconContainer = styled.div`
   position: absolute;
   top: 4.4rem;
@@ -30,7 +30,9 @@ const ChatSearch = () => {
   const { colors } = useSelector((state) => state.styles);
   return (
     <Container>
-      <Input placeholder="Search" bg={colors.bgGrey} />
+      <StyledForm>
+        <Input placeholder="Search" bg={colors.bgGrey} />
+      </StyledForm>
       <SearchIconContainer>
         <SearchIcon size="1rem" />
       </SearchIconContainer>

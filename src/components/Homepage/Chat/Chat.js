@@ -103,6 +103,7 @@ const StyledUtilityContainer = styled.div`
 `;
 const StyledInput = styled.input`
   background-color: ${({ bg }) => bg};
+  font-size: 1rem;
   border: none;
   padding: 0rem 1rem;
   height: 2.5rem;
@@ -131,13 +132,17 @@ const Chat = () => {
     currentUser.uid,
     chatItemData.uid
   );
-
+  const [showMessages, setShowMessages] = useState(false);
   const { messages } = useSelector((state) => state.user);
   const [focused, setFocused] = useState(false);
   useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
   useFetchMessages(currentUser.uid, chatItemData.uid);
   console.log(chatItemData);
+
   useEffect(() => {
+    setTimeout(() => {
+      setShowMessages(true);
+    }, 400);
     return () => {
       let tempChats = [];
       const docRef = doc(db, "users", chatItemData.uid);
@@ -174,12 +179,13 @@ const Chat = () => {
       initial={{ x: 500 }}
       animate={{
         x: 0,
-        transition: {
-          type: "spring",
-          stiffness: 200,
-          damping: 40,
-          mass: 2,
-        },
+        transition: { duration: 0.4 },
+        // transition: {
+        //   // type: "spring",
+        //   // stiffness: 200,
+        //   // damping: 40,
+        //   // mass: 2,
+        // },
       }}
       exit={{ x: -500, ease: "easeOut" }}
       key="content"
@@ -214,7 +220,7 @@ const Chat = () => {
         </StyledNav>
       </div>
 
-      <Messages focused={focused} messages={messages} />
+      {showMessages && <Messages focused={focused} messages={messages} />}
 
       <StyledUtilityContainer bd={bgGrey}>
         <LocationIcon color={utilityIconColor} size={utilityIconSize} />
