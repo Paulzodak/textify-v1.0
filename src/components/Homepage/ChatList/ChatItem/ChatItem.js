@@ -9,6 +9,7 @@ import { setChatItemData } from "../../../../redux/people";
 import { setShowChat, setShowHomeNav } from "../../../../redux/home";
 import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db } from "../../../firebase";
+import useFetchMessages from "../../../../Hooks/useFetchMessages";
 const StyledContainer = styled.div`
   /* height: 3rem; */
   margin: 1rem 0;
@@ -104,7 +105,6 @@ const ChatItem = ({ item }) => {
     dispatch(setChatItemData({ chatItemData: item }));
     dispatch(setShowHomeNav({ showHomeNav: false }));
   };
-
   return (
     <>
       <AnimatePresence>
@@ -117,10 +117,10 @@ const ChatItem = ({ item }) => {
         </StyledRow_1>
         <StyledRow_2>
           <StyledUsername cl={textBlack}>{item.username}</StyledUsername>
-          {item.messages.map((item, index) => {
-            if (index === 0) {
+          {item.messages.map((items, index) => {
+            if (index === item.messages.length - 1) {
               return (
-                <StyledLastMsg cl={textGrey}>{item.message}</StyledLastMsg>
+                <StyledLastMsg cl={textGrey}>{items.message}</StyledLastMsg>
               );
             }
           })}

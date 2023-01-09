@@ -30,6 +30,8 @@ import { AiOutlineSend as SendIcon } from "react-icons/ai";
 import useFetchActive from "../../../Hooks/useFetchActive";
 import useFetchisTyping from "../../../Hooks/useFetchisTyping";
 import useUpdateisTyping from "../../../Hooks/useUpdateisTyping";
+import Messages from "./Messages";
+import useFetchMessages from "../../../Hooks/useFetchMessages";
 const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0rem;
@@ -37,17 +39,15 @@ const StyledContainer = styled(motion.div)`
   left: 0rem;
   background-color: white;
   width: 100vw;
+  max-width: 100vw;
   height: 100vh;
-  /* overflow: hidden; */
+  overflow: hidden;
   /* border: 1px solid red; */
-  /* display: grid; */
-  /* grid-template-rows: 4rem auto 3rem; */
-  box-shadow: 0px 0px 10px rgb(190, 190, 190);
+  display: grid;
+  grid-template-rows: 5rem 2fr 4rem;
+  /* box-shadow: 0px 0px 10px rgb(190, 190, 190); */
 `;
-const StyledSubContainer = styled.div`
-  width: 100%;
-  height: 100vh;
-`;
+
 const StyledNav = styled.nav`
   display: grid;
   grid-template-columns: 10% 15% 47% 14% 14%;
@@ -55,8 +55,9 @@ const StyledNav = styled.nav`
   width: 100%;
   overflow: hidden;
   top: 0rem;
+  background-color: white;
   /* border: 1px solid red; */
-  /* height: 4rem; */
+  /* height: 100%; */
   padding: 0.5rem 0;
   box-sizing: border-box;
   border-bottom: 1px solid ${({ border }) => border};
@@ -122,8 +123,7 @@ const Chat = () => {
   const { mainGreen } = useSelector((state) => state.styles.colors);
   const { chatItemData } = useSelector((state) => state.people);
   const { chats } = useSelector((state) => state.user);
-  // const [activeStatusForThisUser, setActiveStatusForThisUser] = useState(false);
-  // const [isTyping, setIsTyping] = useState(false);
+
   const [isOtherUserTyping, setIsOtherUserTyping] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [userActiveStatus] = useFetchActive(chatItemData.uid);
@@ -131,8 +131,12 @@ const Chat = () => {
     currentUser.uid,
     chatItemData.uid
   );
-  useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
 
+  const { messages } = useSelector((state) => state.user);
+  const [focused, setFocused] = useState(false);
+  useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
+  useFetchMessages(currentUser.uid, chatItemData.uid);
+  console.log(chatItemData);
   useEffect(() => {
     return () => {
       let tempChats = [];
@@ -180,7 +184,8 @@ const Chat = () => {
       exit={{ x: -500, ease: "easeOut" }}
       key="content"
     >
-      <StyledSubContainer>
+      {/* <StyledSubContainer> */}
+      <div>
         <StyledNav border={bgGrey}>
           <StyledBackIconContainer onClick={showChatHandler}>
             <BackIcon size="1.5rem" />
@@ -207,26 +212,33 @@ const Chat = () => {
             </center>
           </StyledIconContainer>
         </StyledNav>
+      </div>
 
-        <StyledUtilityContainer bd={bgGrey}>
-          <LocationIcon color={utilityIconColor} size={utilityIconSize} />
-          <SmileIcon color={utilityIconColor} size={utilityIconSize} />
-          <GalleryIcon color={utilityIconColor} size={utilityIconSize} />
-          <StyledInput
-            onChange={inputHandler}
-            value={userInput}
-            textGrey={textGrey}
-            placeholder="Aa"
-            color={utilityIconColor}
-            bg={bgGrey}
-          />
-          <SendIcon
-            onClick={sendMessageHandler}
-            color={utilityIconColor}
-            size={utilityIconSize}
-          />
-        </StyledUtilityContainer>
-      </StyledSubContainer>
+      <Messages focused={focused} messages={messages} />
+
+      <StyledUtilityContainer bd={bgGrey}>
+        <LocationIcon color={utilityIconColor} size={utilityIconSize} />
+        <SmileIcon color={utilityIconColor} size={utilityIconSize} />
+        <GalleryIcon color={utilityIconColor} size={utilityIconSize} />
+        <StyledInput
+          onChange={inputHandler}
+          onFocus={() => {
+            setFocused(true);
+          }}
+          onBlur={() => setFocused(false)}
+          value={userInput}
+          textGrey={textGrey}
+          placeholder="Aa"
+          color={utilityIconColor}
+          bg={bgGrey}
+        />
+        <SendIcon
+          onClick={sendMessageHandler}
+          color={utilityIconColor}
+          size={utilityIconSize}
+        />
+      </StyledUtilityContainer>
+      {/* </StyledSubContainer> */}
     </StyledContainer>
   );
 };
