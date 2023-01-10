@@ -32,6 +32,7 @@ import useFetchisTyping from "../../../Hooks/useFetchisTyping";
 import useUpdateisTyping from "../../../Hooks/useUpdateisTyping";
 import Messages from "./Messages";
 import useFetchMessages from "../../../Hooks/useFetchMessages";
+import { pushMessage } from "../../../redux/user";
 const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0rem;
@@ -137,12 +138,15 @@ const Chat = () => {
   const [focused, setFocused] = useState(false);
   useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
   useFetchMessages(currentUser.uid, chatItemData.uid);
-  console.log(chatItemData);
+  // console.log(chatItemData);
+  // console.log(messages);
 
   useEffect(() => {
     setTimeout(() => {
       setShowMessages(true);
     }, 400);
+  }, []);
+  useEffect(() => {
     return () => {
       let tempChats = [];
       const docRef = doc(db, "users", chatItemData.uid);
@@ -159,7 +163,7 @@ const Chat = () => {
         })
         .catch((err) => console.log(err));
     };
-  }, [userInput]);
+  }, []);
 
   const showChatHandler = () => {
     dispatch(setShowChat({ showChat: false }));
@@ -171,9 +175,68 @@ const Chat = () => {
   const inputHandler = (e) => {
     setUserInput(e.target.value);
   };
+  // console.log(userInput);
 
-  const sendMessageHandler = () => {};
+  const sendMessageHandler = () => {
+    const tempMsg = [...messages];
+    const message = userInput;
+    const createdAt = "12:00";
+    const sender = currentUser.username;
+    const read = false;
+    const data = {
+      message: message,
+      createdAt: createdAt,
+      sender: sender,
+      // read: read,
+    };
+    tempMsg.push({
+      ...data,
+    });
+    // console.log(tempMsg);
+    // dispatch(
+    //   pushMessage({
+    //     data: {
+    //       ...data,
+    //     },
+    //   })
+    // );
+    // PUSH TO CURRENT USER CHATS
+    let tempChats = [...chats];
+    [...tempChats].map((item, index) => {
+      if (item.username === chatItemData.username) {
+        const chatItem = { ...item };
 
+        chatItem.messages = [...chatItem.messages, data];
+        // console.log(chatItem);
+        tempChats[index] = chatItem;
+        // console.log(tempChats);
+      }
+    });
+    const docRef = doc(db, "users", currentUser.uid);
+    const d = { chats: tempChats };
+    updateDoc(docRef, d);
+
+    // PUSH TO OTHER USER CHATS
+    const docRef2 = doc(db, "user", chatItemData.uid);
+    getDoc(docRef).then((res) => {
+      let tempChats2 = [...res.data().chats];
+      res.data().chats.map((item, index) => {
+        if (item.username === currentUser.username) {
+          const chatItem = { ...item };
+          chatItem.messages = [...chatItem.messages, data];
+          tempChats2[index] = chatItem;
+
+          const docRef = doc(db, "users", chatItemData.uid);
+          const d = { chats: tempChats2 };
+          updateDoc(docRef, d);
+          console.log("done");
+        }
+      });
+    });
+
+    setUserInput("");
+  };
+  // console.log(messages);
   return (
     <StyledContainer
       initial={{ x: 500 }}
@@ -239,7 +302,9 @@ const Chat = () => {
           bg={bgGrey}
         />
         <SendIcon
-          onClick={sendMessageHandler}
+          onClick={() => {
+            sendMessageHandler();
+          }}
           color={utilityIconColor}
           size={utilityIconSize}
         />

@@ -25,6 +25,9 @@ export const userSlice = createSlice({
     setMessages: (state, action) => {
       state.messages = action.payload.messages;
     },
+    pushMessage: (state, action) => {
+      state.messages.push(action.payload.data);
+    },
     // Adds a new message to the chats
     addMessage: (state, action) => {
       state.chats.action.payload.receiverId.push(action.payload.newMessageObj);
@@ -34,6 +37,6 @@ export const userSlice = createSlice({
     },
   },
 });
-export const { setMessages, setChats, setCurrentUser, setActive } =
+export const { pushMessage, setMessages, setChats, setCurrentUser, setActive } =
   userSlice.actions;
 export default userSlice.reducer;

@@ -38,8 +38,7 @@ const useUpdateisTyping = (currentUserUid, userUid, userInput) => {
         })
         .catch((err) => console.log());
     }
-  });
-  return <div></div>;
+  }, []);
 };
 
 useUpdateisTyping.propTypes = {

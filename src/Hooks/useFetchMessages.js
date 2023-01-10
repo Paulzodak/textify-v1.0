@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 const useFetchMessages = (currentUserUid, userUid) => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
-  console.log(currentUserUid);
-  console.log(userUid);
+  // console.log(currentUserUid);
+  // console.log(userUid);
   useEffect(() => {
     const colRef = collection(db, "users");
     const q = query(colRef);
@@ -18,7 +18,7 @@ const useFetchMessages = (currentUserUid, userUid) => {
         if (user.data().uid === currentUserUid) {
           user.data().chats.map((item) => {
             if (item.uid === userUid) {
-              console.log(item.messages);
+              // console.log(item.messages);
               dispatch(setMessages({ messages: item.messages }));
             }
           });

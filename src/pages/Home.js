@@ -27,6 +27,7 @@ import People from "../components/People/People";
 import SearchTest from "../components/SearchTest";
 import Chat from "../components/Homepage/Chat/Chat";
 import { setMountChats, setShowHomeNav } from "../redux/home";
+import useConsistentCurrentUserDataFetch from "../Hooks/useConsistentCurrentUserDataFetch";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -72,9 +73,9 @@ const Home = () => {
   const { showPeoplePage } = useSelector((state) => state.home.layout);
   const { showChatsPage } = useSelector((state) => state.home.layout);
   const { showHomeNav } = useSelector((state) => state.home.layout);
-
+  // useConsistentCurrentUserDataFetch({ currentUser });
   // console.log(chats);
-  // console.log(currentUser);
+  console.log(currentUser);
   const signout = async () => {
     await signOut(auth);
     dispatch(setActive({ isActive: false }));
@@ -88,7 +89,6 @@ const Home = () => {
 
     // console.log("s");
   };
-
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -108,22 +108,25 @@ const Home = () => {
             const data = { isActive: true };
             console.log("updated");
             updateDoc(docRef, data)
-              .then((res) => console.log(res))
-              .catch((res) => console.log(res));
-          }, 1000);
-          // });
+              .then(console.log("updated"))
+              .catch(console.log("updated"));
+            // }, 1000);
+            // });
+          });
         };
         getData();
-      } else {
-        // dispatch(setActive({ isActive: false }));
-        // const docRef = doc(db, "users", currentUser.uid);
-        // const data = { isActive: false };
-        // console.log("updated");
-        // updateDoc(docRef, data)
-        //   .then((res) => console.log(res))
-        //   .catch((res) => console.log(res));
-        // navigate("/");
       }
+
+      //  else {
+      //   // dispatch(setActive({ isActive: false }));
+      //   // const docRef = doc(db, "users", currentUser.uid);
+      //   // const data = { isActive: false };
+      //   // console.log("updated");
+      //   // updateDoc(docRef, data)
+      //   //   .then((res) => console.log(res))
+      //   //   .catch((res) => console.log(res));
+      //   // navigate("/");
+      // }
     });
 
     const colRef = collection(db, "users");
@@ -131,7 +134,7 @@ const Home = () => {
     onSnapshot(q, () => {
       const docRef = doc(db, "users", currentUser.uid);
       getDoc(docRef).then((res) => {
-        // console.log("reupdated");
+        console.log("reupdated");
         dispatch(setCurrentUser({ currentUser: res.data() }));
         // console.log(res.data());
         dispatch(setChats({ chats: res.data().chats }));

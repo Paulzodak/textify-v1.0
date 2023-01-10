@@ -63,6 +63,7 @@ const StyledMsgContent = styled.div`
   /* border: 1px solid red; */
   background-color: ${({ bg }) => bg};
   padding: 0.5rem;
+  box-shadow: 0px 0px 30px rgb(245, 245, 245);
   box-sizing: border-box;
   /* border-radius: 0.5rem 0.5rem 0.5rem 0.5rem; */
   border-radius: ${({ ps }) =>
@@ -102,13 +103,13 @@ const Messages = ({ messages, focused }) => {
           if (message.sender === currentUser.username) {
             return (
               <StyledBlockWrapper
-                initial={{ scale: 0, opacity: 0 }}
+                initial={{ scale: 0 }}
                 animate={{
                   scale: 1,
 
-                  opacity: 1,
+                  // opacity: 1,
                 }}
-                exit={{ opacity: 0, scale: 0 }}
+                exit={{ opacity: 0 }}
                 key={message.message}
               >
                 <Right ref={ref}>
