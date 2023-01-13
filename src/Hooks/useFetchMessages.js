@@ -12,7 +12,7 @@ const useFetchMessages = (currentUserUid, userUid) => {
   useEffect(() => {
     const colRef = collection(db, "users");
     const q = query(colRef);
-    onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       snapshot.docs.forEach((user) => {
         // console.log(user.data());
         if (user.data().uid === currentUserUid) {
@@ -25,7 +25,12 @@ const useFetchMessages = (currentUserUid, userUid) => {
         }
       });
     });
-  }, []);
+
+    return () => {
+      console.log("unsubscribing");
+      unsubscribe();
+    };
+  }, [userUid]);
 };
 
 export default useFetchMessages;

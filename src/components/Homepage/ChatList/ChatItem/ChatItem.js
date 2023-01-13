@@ -10,6 +10,7 @@ import { setShowChat, setShowHomeNav } from "../../../../redux/home";
 import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 import useFetchMessages from "../../../../Hooks/useFetchMessages";
+import { useMediaQuery } from "react-responsive";
 const StyledContainer = styled.div`
   /* height: 3rem; */
   margin: 1rem 0;
@@ -78,19 +79,6 @@ const StyledActive = styled.div`
 `;
 const ChatItem = ({ item }) => {
   const [activeStatusForThisUser, setActiveStatusForThisUser] = useState(false);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setChatItemData({ chatItemData: item }));
-    const colRef = collection(db, "users");
-
-    const q = query(colRef, where("username", "==", item.username));
-    onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((user) => {
-        setActiveStatusForThisUser(user.data().isActive);
-      });
-    });
-  }, []);
-
   const { textGrey } = useSelector((state) => state.styles.colors);
   const { textBlack } = useSelector((state) => state.styles.colors);
 
@@ -99,17 +87,32 @@ const ChatItem = ({ item }) => {
   const { currentUser } = useSelector((state) => state.user);
 
   const { chatItemData } = useSelector((state) => state.people);
+
   const { showChat } = useSelector((state) => state.home.layout);
+  const isTablet = useMediaQuery({ query: "(min-width: 500px)" });
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setChatItemData({ chatItemData: item }));
+    const colRef = collection(db, "users");
+
+    const q = query(colRef, where("username", "==", item.username));
+    onSnapshot(q, (snapshot) => {
+      console.log("chatitem");
+      snapshot.docs.forEach((user) => {
+        setActiveStatusForThisUser(user.data().isActive);
+      });
+    });
+  }, []);
+
   const showChatHandler = () => {
     dispatch(setShowChat({ showChat: true }));
     dispatch(setChatItemData({ chatItemData: item }));
-    dispatch(setShowHomeNav({ showHomeNav: false }));
+    // !isTablet && dispatch(setShowHomeNav({ showHomeNav: false }));
   };
+  // useFetchMessages(currentUser.uid, chatItemData.uid);
+  // console.log(chatItemData);
   return (
     <>
-      <AnimatePresence>
-        {showChat && <Chat data={chatItemData} />}
-      </AnimatePresence>
       <StyledContainer onClick={showChatHandler} hoverCl={lightBgGreen}>
         <StyledRow_1>
           <StyledUserImage src={userImage} />

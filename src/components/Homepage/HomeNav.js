@@ -23,7 +23,10 @@ const StyledNav = styled(motion.nav)`
   border: 1px solid #f5f5f6;
   width: 100%;
   box-sizing: border-box;
-
+  @media (min-width: 500px) {
+    /* display: none; */
+    width: 50%;
+  }
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
   justify-content: space-around;

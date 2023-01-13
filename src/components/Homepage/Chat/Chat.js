@@ -33,18 +33,25 @@ import useUpdateisTyping from "../../../Hooks/useUpdateisTyping";
 import Messages from "./Messages";
 import useFetchMessages from "../../../Hooks/useFetchMessages";
 import { pushMessage } from "../../../redux/user";
+import useConsistentCurrentUserDataFetch from "../../../Hooks/useConsistentCurrentUserDataFetch";
+import useConsistentlyFetchChatItemData from "../../../Hooks/useConsistentlyFetchChatItemData";
 const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0rem;
   z-index: 100;
   left: 0rem;
   background-color: white;
-  width: 100vw;
-  max-width: 100vw;
+  width: 100%;
+  max-width: 100%;
   height: 100vh;
   overflow: hidden;
-  /* border: 1px solid red; */
+
   display: grid;
+  @media (min-width: 500px) {
+    width: 50vw;
+    max-width: 50vw;
+    /* border-left: 1px solid ${({ bd }) => bd}; */
+  }
   grid-template-rows: 5rem 2fr 4rem;
   /* box-shadow: 0px 0px 10px rgb(190, 190, 190); */
 `;
@@ -54,6 +61,11 @@ const StyledNav = styled.nav`
   grid-template-columns: 10% 15% 47% 14% 14%;
   position: fixed;
   width: 100%;
+  @media (min-width: 500px) {
+    width: 50%;
+    /* height: 3rem; */
+    /* position: relative; */
+  }
   overflow: hidden;
   top: 0rem;
   background-color: white;
@@ -91,9 +103,13 @@ const StyledIconContainer = styled.div`
 const StyledUtilityContainer = styled.div`
   position: fixed;
   bottom: 0rem;
-  left: 0;
+  /* left: 0; */
   height: 3.5rem;
+  background-color: white;
   width: 100%;
+  @media (min-width: 500px) {
+    width: 50%;
+  }
   /* border: 1px solid red; */
   border-top: 1px solid ${({ bd }) => bd};
   display: grid;
@@ -136,36 +152,19 @@ const Chat = () => {
   const [showMessages, setShowMessages] = useState(false);
   const { messages } = useSelector((state) => state.user);
   const [focused, setFocused] = useState(false);
+
   useUpdateisTyping(currentUser.uid, chatItemData.uid, userInput);
-  useFetchMessages(currentUser.uid, chatItemData.uid);
-  // console.log(chatItemData);
-  // console.log(messages);
+  useFetchMessages(currentUser.uid, chatItemData.uid, chatItemData);
+  useConsistentlyFetchChatItemData(chatItemData, currentUser);
+  useConsistentCurrentUserDataFetch(currentUser);
 
   useEffect(() => {
     setTimeout(() => {
       setShowMessages(true);
     }, 400);
   }, []);
-  useEffect(() => {
-    return () => {
-      let tempChats = [];
-      const docRef = doc(db, "users", chatItemData.uid);
-      getDoc(docRef)
-        .then((res) => {
-          tempChats = res.data().chats;
-          tempChats.map((user) => {
-            if (user.uid === currentUser.uid) {
-              user.isTyping = false;
-            }
-          });
-          const data = { chats: tempChats };
-          updateDoc(docRef, data);
-        })
-        .catch((err) => console.log(err));
-    };
-  }, []);
 
-  const showChatHandler = () => {
+  const hideChatHandler = () => {
     dispatch(setShowChat({ showChat: false }));
     dispatch(setShowHomeNav({ showHomeNav: true }));
   };
@@ -217,32 +216,36 @@ const Chat = () => {
     updateDoc(docRef, d);
 
     // PUSH TO OTHER USER CHATS
-    const docRef2 = doc(db, "user", chatItemData.uid);
-    getDoc(docRef).then((res) => {
-      let tempChats2 = [...res.data().chats];
+    // console.log(chatItemData.uid);
+    const userDocRef = doc(db, "users", chatItemData.uid);
+    getDoc(userDocRef).then((res) => {
+      setUserInput("");
+      // console.log(res.data());
+      let userTempChats = [...res.data().chats];
+
       res.data().chats.map((item, index) => {
         if (item.username === currentUser.username) {
           const chatItem = { ...item };
           chatItem.messages = [...chatItem.messages, data];
-          tempChats2[index] = chatItem;
-
-          const docRef = doc(db, "users", chatItemData.uid);
-          const d = { chats: tempChats2 };
-          updateDoc(docRef, d);
-          console.log("done");
+          // console.log(chatItem.messages);
+          userTempChats[index] = chatItem;
         }
+        // const userDocRef2 = doc(db, "users", chatItemData.uid);
       });
+      const d2 = { chats: userTempChats };
+      updateDoc(userDocRef, d2);
+      // console.log("done");
     });
-
-    setUserInput("");
   };
   // console.log(messages);
   return (
     <StyledContainer
+      bd={bgGrey}
       initial={{ x: 500 }}
       animate={{
         x: 0,
-        transition: { duration: 0.4 },
+        // scale: 1,
+        transition: { duration: 0.2 },
         // transition: {
         //   // type: "spring",
         //   // stiffness: 200,
@@ -250,13 +253,13 @@ const Chat = () => {
         //   // mass: 2,
         // },
       }}
-      exit={{ x: -500, ease: "easeOut" }}
+      exit={{ x: 500, ease: "easeOut" }}
       key="content"
     >
       {/* <StyledSubContainer> */}
       <div>
         <StyledNav border={bgGrey}>
-          <StyledBackIconContainer onClick={showChatHandler}>
+          <StyledBackIconContainer onClick={hideChatHandler}>
             <BackIcon size="1.5rem" />
           </StyledBackIconContainer>
           <StyledProfileImage src={userImage} />

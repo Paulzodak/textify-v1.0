@@ -7,7 +7,7 @@ import { StyledRow_3_skeleton } from "./ChatItem";
 import styled from "styled-components";
 const StyledContainer = styled.div`
   margin: 1rem;
-  width: 100vw;
+  width: 50vw;
 `;
 const ChatItemSkeleton = () => {
   return (

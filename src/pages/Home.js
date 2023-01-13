@@ -28,6 +28,8 @@ import SearchTest from "../components/SearchTest";
 import Chat from "../components/Homepage/Chat/Chat";
 import { setMountChats, setShowHomeNav } from "../redux/home";
 import useConsistentCurrentUserDataFetch from "../Hooks/useConsistentCurrentUserDataFetch";
+import useConsistentlyFetchChatItemData from "../Hooks/useConsistentlyFetchChatItemData";
+import ChatPage from "../layout/ChatPage";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -73,196 +75,55 @@ const Home = () => {
   const { showPeoplePage } = useSelector((state) => state.home.layout);
   const { showChatsPage } = useSelector((state) => state.home.layout);
   const { showHomeNav } = useSelector((state) => state.home.layout);
-  // useConsistentCurrentUserDataFetch({ currentUser });
-  // console.log(chats);
-  console.log(currentUser);
+  const { searchedUser } = useSelector((state) => state.people);
+  const { chatItemData } = useSelector((state) => state.people);
+
   const signout = async () => {
     await signOut(auth);
+    // SETS ACTIVE TO FALSE IN DB
     dispatch(setActive({ isActive: false }));
     const docRef = doc(db, "users", currentUser.uid);
     const data = { isActive: false };
-    // console.log("updated");
-    updateDoc(docRef, data)
-      .then((res) => console.log(res))
-      .catch((res) => console.log(res));
+    updateDoc(docRef, data);
     navigate("/");
-
-    // console.log("s");
   };
+
+  //  GETS DATA FOR THE CURRENTUSER ON FIRST AND INITIAL LOGIN AND STORES IN REDUX CURRENTUSER STATE
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const getData = () => {
+    const unsubscribe = () =>
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
           const docRef = doc(db, "users", user.uid);
           getDoc(docRef).then((res) => {
             dispatch(setCurrentUser({ currentUser: res.data() }));
-            // console.log(res.data());
+
             dispatch(setChats({ chats: res.data().chats }));
 
             dispatch(setMountChats({ mountChats: true }));
             dispatch(setActive({ isActive: true }));
-
-            // SET ACTIVENESS IN THE DB
-            // setTimeout(() => {
-            const docRef = doc(db, "users", user.uid);
-            const data = { isActive: true };
-            console.log("updated");
-            updateDoc(docRef, data)
-              .then(console.log("updated"))
-              .catch(console.log("updated"));
-            // }, 1000);
-            // });
           });
-        };
-        getData();
-      }
-
-      //  else {
-      //   // dispatch(setActive({ isActive: false }));
-      //   // const docRef = doc(db, "users", currentUser.uid);
-      //   // const data = { isActive: false };
-      //   // console.log("updated");
-      //   // updateDoc(docRef, data)
-      //   //   .then((res) => console.log(res))
-      //   //   .catch((res) => console.log(res));
-      //   // navigate("/");
-      // }
-    });
-
-    const colRef = collection(db, "users");
-    const q = query(colRef);
-    onSnapshot(q, () => {
-      const docRef = doc(db, "users", currentUser.uid);
-      getDoc(docRef).then((res) => {
-        console.log("reupdated");
-        dispatch(setCurrentUser({ currentUser: res.data() }));
-        // console.log(res.data());
-        dispatch(setChats({ chats: res.data().chats }));
-
-        dispatch(setMountChats({ mountChats: true }));
-        dispatch(setActive({ isActive: true }));
+        }
+        // SETS ISACTIVE TO TRUE IN THE DB
+        const docRef = doc(db, "users", user.uid);
+        const data = { isActive: true };
+        console.log("updated");
+        updateDoc(docRef, data);
       });
-      // });
-    });
-    // const docRef = doc(db, "users", currentUser.uid);
-    // getDoc(docRef).then((res) => {
-    //   dispatch(setCurrentUser({ currentUser: res.data() }));
-    //   console.log(res.data());
-    // });
-
-    // const colRef2 = collection(db, "users");
-    // const q2 = query(colRef2);
-    // onSnapshot(q2, () => {
-    //   chats.map(() => {
-    //     const docRef = doc(db, "users", chats.uid);
-    //     getDoc(docRef).then((res) => {
-    //       console.log("reupdated 2");
-    //       console.log(res.data());
-    //       dispatch(setChats({ chats: res.data().chats }));
-    //     });
-    //   });
-
-    //   // });
-    // });
+    unsubscribe();
+    return () => unsubscribe();
   }, []);
-
-  // CONSISTENTLY LISTEN TO FRIENDS DATA
-
-  // const colRef = collection(db, "users");
-  // const q = query(colRef);
-  // onSnapshot(q, () => {
-  //   const docRef = doc(db, "users", currentUser.uid);
-  //   getDoc(docRef).then((res) => {
-  //     dispatch(setChats({ chats: res.data().chats }));
-  //   });
-  //   // });
-  // });
-  // useEffect(() => {
-  //   const userDocRef = doc(db, "users", currentUser.uid);
-  //   onSnapshot(userDocRef, (snapshot) => {
-  //     console.log(snapshot.data());
-  //   });
-  //   console.log(currentUser);
-  // }, [currentUser]);
-
-  const getMessage = (e) => {
-    const docRef2 = doc(db, "users", currentUser.uid);
-
-    getDoc(docRef2)
-      .then((res) => console.log(res.data()))
-      .catch((res) => console.log(res));
-  };
-
-  const getChat = (e) => {
-    // console.log(currentUser.uid);
-    // // const docRef = doc(db, "users", currentUser.uid, "chats", "ppiano");
-    // // const data = {};
-    // // setDoc(docRef, data);
-    // const docRef2 = doc(db, "users", currentUser.uid, "chats");
-    // getDoc(docRef2)
-    //   .then((res) => console.log(res.data()))
-    //   .catch((res) => console.log(res));
-  };
-
-  const createChat = () => {
-    const docRef = doc(db, "users", currentUser.uid);
-    const data = { null: "null" };
-
-    setDoc(docRef, data);
-  };
-
-  const createMessage = () => {
-    const docRef = doc(
-      db,
-      "users",
-      currentUser.uid,
-      "chats",
-      "chats",
-      "peter"
-      // "peter",
-      // "message",
-      // "Hello"
-    );
-    const data = { message: "Hello", by: currentUser.name };
-
-    setDoc(docRef, data);
-  };
+  //
+  // HIGHT PRIORITY!! | KEEPS ALL CURRENTUSER DATA IN THE DOM UPDATED WITH DATA IN THE DB
+  useConsistentCurrentUserDataFetch(currentUser);
 
   return (
     <>
       <Container>
-        {/* <div>Home</div> */}
-        {/* {showChat && <Chat />} */}
-
         <AnimatePresence>
           {/*CONDITIONALLY RENDERED INDIVIDUALLY DUE TO EXIT ANIMATION CRITERIA */}
-          {/* {showChatsPage && <Utility key="utility" />} */}
+
           {showPeoplePage && <People key="people" />}
-          {showChatsPage && <ChatList key="chatList" mountChats={mountChats} />}
-          {showChatsPage && (
-            <StyledAddUser
-              initial={{ x: "200%" }}
-              animate={{
-                x: "0%",
-                transition: {
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 100,
-                  mass: 20,
-                },
-              }}
-              exit={{ x: "200%", transition: { duration: 0.1 } }}
-              // transition={{
-              //   type: "spring",
-              //   stiffness: 500,
-              //   damping: 100,
-              //   mass: 20,
-              // }}
-              key="userIcon"
-            >
-              <AddUserIcon color="white" size="2.5rem" />
-            </StyledAddUser>
-          )}
+          {showChatsPage && <ChatPage mountChats={mountChats} />}
           {showHomeNav && <HomeNav key="Homenav" />}
         </AnimatePresence>
       </Container>
@@ -270,14 +131,6 @@ const Home = () => {
       <button key="btn" onClick={signout}>
         signOut
       </button>
-      <button
-      // onClick={() => {
-      //   setShowChat(true);
-      // }}
-      >
-        show chat
-      </button>
-
       <br />
     </>
   );

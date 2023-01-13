@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { GoSearch as SearchIcon } from "react-icons/go";
 const Container = styled.div`
   margin: 1rem 0.2rem;
+  padding: 0 1rem;
 `;
 const Input = styled.input`
   width: 100%;
@@ -23,7 +24,7 @@ const Input = styled.input`
 const StyledForm = styled.form``;
 const SearchIconContainer = styled.div`
   position: absolute;
-  top: 4.4rem;
+  top: 5.7rem;
   left: 2rem;
 `;
 const ChatSearch = () => {

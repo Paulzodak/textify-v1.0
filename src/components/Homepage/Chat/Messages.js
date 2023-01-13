@@ -12,7 +12,11 @@ const StyledContainer = styled.div`
   top: 4.2rem;
   bottom: 3.5rem;
   overflow-x: hidden;
+  background-color: white;
   overflow-y: scroll;
+  @media (min-width: 500px) {
+    width: 50vw;
+  }
   /* border: 1px solid red; */
   &::-webkit-scrollbar {
     width: 0.2rem;
@@ -75,7 +79,7 @@ const StyledBlockWrapper = styled(motion.div)`
   /* display: block; */
   /* border: 1px solid red; */
   display: inline-block;
-  width: 100vw;
+  width: 100%;
 
   /* height: 3rem; */
   /* margin: 1rem 0.5rem; */

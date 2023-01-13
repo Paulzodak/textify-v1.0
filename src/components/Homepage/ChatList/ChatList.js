@@ -8,13 +8,18 @@ import { AnimatePresence, motion } from "framer-motion";
 import AddUser from "../../AddUsers/AddUser";
 import EmptyChats from "./EmptyChats.js";
 import Utility from "../Utility/Utility";
-
+import useConsistentCurrentUserDataFetch from "../../../Hooks/useConsistentCurrentUserDataFetch";
 import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
-const StyledContainer = styled.div``;
+import propTypes from "prop-types";
+const StyledContainer = styled(motion.div)`
+  border-right: 1px solid ${({ bd }) => bd};
+`;
+const StyledChatsContainer = styled.div``;
+
 const StyledAddUser = styled(motion.div)`
   border-radius: 100%;
   position: fixed;
-  bottom: 0rem;
+  bottom: 5rem;
   right: 1.5rem;
   display: inline-block;
   padding: 1rem;
@@ -37,8 +42,10 @@ const StyledAddUser = styled(motion.div)`
   );
 `;
 const ChatList = ({ mountChats }) => {
+  const { bgGrey } = useSelector((state) => state.styles.colors);
   const { chats } = useSelector((state) => state.user);
-  const [showAddUser, setShowAddUser] = useState(true);
+  const [state, setState] = useState(1);
+  const { currentUser } = useSelector((state) => state.user);
   const container = {
     hidden: {
       opacity: 0,
@@ -57,39 +64,76 @@ const ChatList = ({ mountChats }) => {
   };
   return (
     <StyledContainer
+      bd={bgGrey}
       initial={{ x: "-100%" }}
       animate={{ x: "0%", transition: { duration: 0.7, delay: 0.5 } }}
       exit={{ x: "-100%", transition: { ease: "easeOut" } }}
     >
       <Utility />
-      {mountChats ? (
-        <motion.div variants={container} initial="hidden" animate="show">
-          {/* <AnimatePresence> */}
-          {[...chats].map((item) => {
-            // if (item.messages.length > 1) {
-            return (
-              <motion.div key={item.username} variants={items}>
-                <ChatItem item={item} />
-              </motion.div>
-            );
-            // }
-          })}
-        </motion.div>
-      ) : (
-        <motion.div variants={container} initial="hidden" animate="show">
-          {/* <AnimatePresence> */}
-          {[...chats].map((item) => {
-            return (
-              <motion.div key={item.id} variants={items}>
-                <ChatItemSkeleton item={item} />
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      )}
-      <AnimatePresence> {chats.length < 1 && <EmptyChats />}</AnimatePresence>
+      <StyledChatsContainer>
+        {mountChats ? (
+          <motion.div variants={container} initial="hidden" animate="show">
+            <AnimatePresence>
+              {[...chats]
+                .sort(() => state)
+                .map((item) => {
+                  // if (item.messages.length > 1) {
+                  return (
+                    <motion.div
+                      layout={true}
+                      key={item.username}
+                      variants={items}
+                    >
+                      <ChatItem item={item} />
+                    </motion.div>
+                  );
+                  // }
+                })}
+            </AnimatePresence>
+          </motion.div>
+        ) : (
+          <motion.div variants={container} initial="hidden" animate="show">
+            {/* <AnimatePresence> */}
+            {[...chats].map((item) => {
+              return (
+                <motion.div key={item.id} variants={items}>
+                  <ChatItemSkeleton item={item} />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
+      </StyledChatsContainer>
+      {/* <AnimatePresence> {chats.length < 1 && <EmptyChats />}</AnimatePresence>
+      <StyledAddUser
+        initial={{ x: "200%" }}
+        animate={{
+          x: "0%",
+          transition: {
+            type: "spring",
+            stiffness: 500,
+            damping: 100,
+            mass: 20,
+          },
+        }}
+        exit={{ x: "200%", transition: { duration: 0.1 } }}
+        // transition={{
+        //   type: "spring",
+        //   stiffness: 500,
+        //   damping: 100,
+        //   mass: 20,
+        // }}
+        key="userIcon"
+      >
+        <AddUserIcon color="white" size="2.5rem" />
+      </StyledAddUser> */}
+      <button onClick={() => setState(-1)}>set</button>
     </StyledContainer>
   );
 };
-
+ChatList.propTypes = {
+  // AWAITS CHAT DATA FROM DB
+  mountChats: propTypes.bool.isRequired,
+  //
+};
 export default ChatList;

@@ -38,13 +38,13 @@ const useUpdateisTyping = (currentUserUid, userUid, userInput) => {
         })
         .catch((err) => console.log());
     }
-  }, []);
+  }, [userInput]);
 };
 
-useUpdateisTyping.propTypes = {
-  currentUserUid: PropTypes.string.isRequired,
-  userUid: PropTypes.string.isRequired,
-  userInput: PropTypes.any.isRequired,
-};
+// useUpdateisTyping.propTypes = {
+//   currentUserUid: PropTypes.string.isRequired,
+//   userUid: PropTypes.string.isRequired,
+//   userInput: PropTypes.any.isRequired,
+// };
 
 export default useUpdateisTyping;
