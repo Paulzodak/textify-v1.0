@@ -69,68 +69,91 @@ const SearchUser = ({ item }) => {
   useEffect(() => {}, []);
 
   const sendMessageHandler = () => {
+    dispatch(setShowChatsPage({ showChatsPage: true }));
+    dispatch(setShowPeoplePage({ showPeoplePage: false }));
+    dispatch(setChatItemData({ chatItemData: searchedUser }));
     dispatch(setShowChat({ showChat: true }));
-    dispatch(setShowHomeNav({ showHomeNav: false }));
+    // dispatch(setShowHomeNav({ showHomeNav: false }));
 
     const tempChats = [...searchedUser.chats];
     const currentUserTempChats = [...currentUser.chats];
 
-    // CHECKS IF FRIEND HAS FRIENDS INITIALLY SINCE WE ARE USING PUSH METHOD TO ADD DATA
-    searchedUser.chats.length > 0 &&
+    // CHECKS IF CURRENT USER HAS FRIENDS INITIALLY SINCE WE WOULD BE MAPPING OVER THE ARRAY OF FRIENDS
+    // TO CHECK FOR EXISTED FRIENDS TO AVOID DUPLICATION
+    if (searchedUser.chats.length > 0) {
+      let exists = null;
       searchedUser.chats.map((friends) => {
         //CHECK IF USER EXISTS IN FRIENDS CHATS
-        if (friends.username !== currentUser.username) {
-          tempChats.push({
-            username: currentUser.username,
-            messages: [],
-            email: currentUser.email,
-            isActive: currentUser.isActive,
-            isTyping: false,
-            uid: currentUser.uid,
-          });
-
-          tempChats.map((chat) => {
-            if (chat.username === currentUser.username) {
-              console.log(chat + "done");
-            }
-          });
-
-          console.log("friend doesnt exist initially");
-          const docRef = doc(db, "users", searchedUser.uid);
-          const data = { chats: tempChats };
-          updateDoc(docRef, data);
+        if (friends.username === currentUser.username) {
+          exists = true;
         }
       });
-    // CHECKS IF CURRENT USER HAS FRIENDS INITIALLY SINCE WE ARE USING PUSH METHOD TO ADD DATA
-    currentUser.chats.length > 0 &&
+      if (!exists) {
+        console.log("pushing to friends chat");
+        tempChats.push({
+          username: currentUser.username,
+          messages: [],
+          email: currentUser.email,
+          isActive: currentUser.isActive,
+          isTyping: false,
+          uid: currentUser.uid,
+        });
+
+        tempChats.map((chat) => {
+          if (chat.username === currentUser.username) {
+            console.log(chat + "done");
+          }
+        });
+
+        console.log("friend doesnt exist initially");
+        const docRef = doc(db, "users", searchedUser.uid);
+        const data = { chats: tempChats };
+        updateDoc(docRef, data);
+      }
+    }
+
+    // CHECKS IF CURRENT USER HAS FRIENDS INITIALLY SINCE WE WOULD BE MAPPING OVER THE ARRAY OF FRIENDS
+    // TO CHECK FOR EXISTED FRIENDS TO AVOID DUPLICATION
+    if (currentUser.chats.length > 0) {
+      let exists = null;
+      //CHECKS IF FRIEND EXISTS IN CURRENT USER CHATS
       currentUser.chats.map((friends) => {
-        //CHECK IF FRIEND EXISTS IN CURRENT USER CHATS
-        if (friends.username !== searchedUser.username) {
-          currentUserTempChats.push({
-            username: searchedUser.username,
-            messages: [],
-            email: searchedUser.email,
-            isActive: searchedUser.isActive,
-            isTyping: false,
-            uid: searchedUser.uid,
-          });
-
-          const docRef = doc(db, "users", currentUser.uid);
-          const data = { chats: currentUserTempChats };
-          updateDoc(docRef, data).then((res) => {
-            const ref = doc(db, "users", currentUser.uid);
-            getDoc(ref).then((res) =>
-              res.data().chats.map((chat) => {
-                if (chat.username === searchedUser.username) {
-                  dispatch(setChatItemData({ chatItemData: chat }));
-                }
-              })
-            );
-          });
+        if (friends.username === searchedUser.username) {
+          exists = true;
         }
       });
+      //
+      // IF FRIEND DOES'NT EXISTS, PROCEED TO ADD FRIEND
+      if (!exists) {
+        console.log(exists);
+        console.log("pushing to user chat");
+        currentUserTempChats.push({
+          username: searchedUser.username,
+          messages: [],
+          email: searchedUser.email,
+          isActive: searchedUser.isActive,
+          isTyping: false,
+          uid: searchedUser.uid,
+        });
 
+        const docRef = doc(db, "users", currentUser.uid);
+        const data = { chats: currentUserTempChats };
+        updateDoc(docRef, data).then((res) => {
+          const ref = doc(db, "users", currentUser.uid);
+          getDoc(ref).then((res) =>
+            res.data().chats.map((chat) => {
+              if (chat.username === searchedUser.username) {
+                dispatch(setChatItemData({ chatItemData: chat }));
+              }
+            })
+          );
+        });
+      }
+      //
+    }
+    //
     if (searchedUser.chats.length < 1) {
+      console.log("pushing to empty friends chat");
       tempChats.push({
         username: currentUser.username,
         messages: [],
@@ -147,6 +170,7 @@ const SearchUser = ({ item }) => {
       updateDoc(docRef, data);
     }
     if (currentUser.chats.length < 1) {
+      console.log("pushing to empty user chat");
       currentUserTempChats.push({
         username: searchedUser.username,
         messages: [],
