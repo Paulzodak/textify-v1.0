@@ -11,6 +11,7 @@ import { BsArrowRight as Arrow } from "react-icons/bs";
 import SearchUser from "./SearchUser";
 import { useDispatch } from "react-redux";
 import { setSearchedUser } from "../../redux/people";
+import HomeNav from "../Homepage/HomeNav";
 const StyledImage = styled.img`
   width: 80%;
   max-width: 20rem;
@@ -68,6 +69,7 @@ const StyledTextbox = styled(motion.div)`
   border-radius: 1rem;
   box-shadow: 0px 0px 30px rgb(190, 190, 190);
   width: 100%;
+  max-width: 25rem;
   background-image: linear-gradient(
     to right top,
     #00d1ed,
@@ -239,6 +241,7 @@ const People = () => {
           searchedUser.username && <SearchUser />
         )}
       </AnimatePresence>
+      {/* <HomeNav /> */}
     </StyledContainer>
   );
 };

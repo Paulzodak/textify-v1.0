@@ -15,13 +15,13 @@ const StyledContainer = styled.div`
   width: 100vw;
   height: 100vh;
 
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 40% 60%;
   }
 `;
 const StyledPosition = styled.div`
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     position: relative;
     top: 0rem;
     height: 100%;

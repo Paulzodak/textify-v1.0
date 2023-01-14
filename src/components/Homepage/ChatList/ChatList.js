@@ -13,6 +13,8 @@ import { AiOutlineUserAdd as AddUserIcon } from "react-icons/ai";
 import propTypes from "prop-types";
 const StyledContainer = styled(motion.div)`
   border-right: 1px solid ${({ bd }) => bd};
+  height: 100%;
+  width: 100%;
 `;
 const StyledChatsContainer = styled.div``;
 
@@ -104,8 +106,13 @@ const ChatList = ({ mountChats }) => {
           </motion.div>
         )}
       </StyledChatsContainer>
-      {/* <AnimatePresence> {chats.length < 1 && <EmptyChats />}</AnimatePresence>
+      <AnimatePresence> {chats.length < 1 && <EmptyChats />}</AnimatePresence>
       <StyledAddUser
+        whileHover={{ scale: 1.3, rotate: 360 }}
+        whileTap={{
+          scale: 0.8,
+          rotate: -90,
+        }}
         initial={{ x: "200%" }}
         animate={{
           x: "0%",
@@ -126,7 +133,7 @@ const ChatList = ({ mountChats }) => {
         key="userIcon"
       >
         <AddUserIcon color="white" size="2.5rem" />
-      </StyledAddUser> */}
+      </StyledAddUser>
       <button onClick={() => setState(-1)}>set</button>
     </StyledContainer>
   );

@@ -30,6 +30,8 @@ import { setMountChats, setShowHomeNav } from "../redux/home";
 import useConsistentCurrentUserDataFetch from "../Hooks/useConsistentCurrentUserDataFetch";
 import useConsistentlyFetchChatItemData from "../Hooks/useConsistentlyFetchChatItemData";
 import ChatPage from "../layout/ChatPage";
+import HomeNavDesktop from "../components/Homepage/HomeNavDesktop";
+import SettingsPage from "../layout/SettingsPage";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -37,6 +39,8 @@ const StyledHeader = styled.header`
 const Inputs = styled.input``;
 const Container = styled.div`
   max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
   /* background-color: black; */
 `;
 const StyledAddUser = styled(motion.div)`
@@ -65,7 +69,13 @@ const StyledAddUser = styled(motion.div)`
     #004d57
   );
 `;
-
+const StyledSubContainer = styled.div`
+  @media (min-width: 800px) {
+    display: grid;
+    grid-template-columns: 7% 93%;
+    /* border: 1px solid red; */
+  }
+`;
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,18 +85,19 @@ const Home = () => {
   const { showPeoplePage } = useSelector((state) => state.home.layout);
   const { showChatsPage } = useSelector((state) => state.home.layout);
   const { showHomeNav } = useSelector((state) => state.home.layout);
+  const { showSettingsPage } = useSelector((state) => state.home.layout);
   const { searchedUser } = useSelector((state) => state.people);
   const { chatItemData } = useSelector((state) => state.people);
 
-  const signout = async () => {
-    await signOut(auth);
-    // SETS ACTIVE TO FALSE IN DB
-    dispatch(setActive({ isActive: false }));
-    const docRef = doc(db, "users", currentUser.uid);
-    const data = { isActive: false };
-    updateDoc(docRef, data);
-    navigate("/");
-  };
+  // const signout = async () => {
+  //   await signOut(auth);
+  //   // SETS ACTIVE TO FALSE IN DB
+  //   dispatch(setActive({ isActive: false }));
+  //   const docRef = doc(db, "users", currentUser.uid);
+  //   const data = { isActive: false };
+  //   updateDoc(docRef, data);
+  //   navigate("/");
+  // };
 
   //  GETS DATA FOR THE CURRENTUSER ON FIRST AND INITIAL LOGIN AND STORES IN REDUX CURRENTUSER STATE
   useEffect(() => {
@@ -102,6 +113,14 @@ const Home = () => {
             dispatch(setMountChats({ mountChats: true }));
             dispatch(setActive({ isActive: true }));
           });
+        } else if (!user) {
+          signOut(auth);
+          // SETS ACTIVE TO FALSE IN DB
+
+          const docRef = doc(db, "users", currentUser.uid);
+          const data = { isActive: false };
+          updateDoc(docRef, data);
+          navigate("/");
         }
         // SETS ISACTIVE TO TRUE IN THE DB
         const docRef = doc(db, "users", user.uid);
@@ -121,16 +140,22 @@ const Home = () => {
       <Container>
         <AnimatePresence>
           {/*CONDITIONALLY RENDERED INDIVIDUALLY DUE TO EXIT ANIMATION CRITERIA */}
+          <StyledSubContainer>
+            <div>{showHomeNav && <HomeNavDesktop />}</div>
+            <div>
+              {showPeoplePage && <People key="people" />}
 
-          {showPeoplePage && <People key="people" />}
-          {showChatsPage && <ChatPage mountChats={mountChats} />}
-          {showHomeNav && <HomeNav key="Homenav" />}
+              {showChatsPage && <ChatPage mountChats={mountChats} />}
+              {showHomeNav && <HomeNav key="Homenav" />}
+              {showSettingsPage && <SettingsPage key="settingspage" />}
+            </div>
+          </StyledSubContainer>
         </AnimatePresence>
+        {/* <button key="btn" onClick={signout}>
+          signOut
+        </button> */}
       </Container>
 
-      <button key="btn" onClick={signout}>
-        signOut
-      </button>
       <br />
     </>
   );

@@ -5,6 +5,7 @@ export const homeSlice = createSlice({
     layout: {
       showChatsPage: true,
       showPeoplePage: false,
+      showSettingsPage: false,
       mountChats: false,
       showChat: false,
       showHomeNav: true,
@@ -26,9 +27,13 @@ export const homeSlice = createSlice({
     setShowHomeNav: (state, action) => {
       state.layout.showHomeNav = action.payload.showHomeNav;
     },
+    setShowSettingsPage: (state, action) => {
+      state.layout.showSettingsPage = action.payload.showSettingsPage;
+    },
   },
 });
 export const {
+  setShowSettingsPage,
   setShowHomeNav,
   setShowChat,
   setMountChats,

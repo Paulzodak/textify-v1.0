@@ -47,10 +47,10 @@ const StyledContainer = styled(motion.div)`
   overflow: hidden;
 
   display: grid;
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     width: 50vw;
     max-width: 50vw;
-    /* border-left: 1px solid ${({ bd }) => bd}; */
+    border-left: 1px solid ${({ bd }) => bd};
   }
   grid-template-rows: 5rem 2fr 4rem;
   /* box-shadow: 0px 0px 10px rgb(190, 190, 190); */
@@ -61,7 +61,7 @@ const StyledNav = styled.nav`
   grid-template-columns: 10% 15% 47% 14% 14%;
   position: fixed;
   width: 100%;
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     width: 50%;
     /* height: 3rem; */
     /* position: relative; */
@@ -107,7 +107,7 @@ const StyledUtilityContainer = styled.div`
   height: 3.5rem;
   background-color: white;
   width: 100%;
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     width: 50%;
   }
   /* border: 1px solid red; */

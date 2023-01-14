@@ -13,24 +13,32 @@ import { setActive } from "../../redux/user";
 import { useDispatch } from "react-redux";
 import { setShowChatsPage, setShowPeoplePage } from "../../redux/home";
 import { setShowChat } from "../../redux/home";
+import userIcon from "../../images/user.png";
 import { setShowSettingsPage } from "../../redux/home";
 const StyledNav = styled(motion.nav)`
-  position: fixed;
-  bottom: 0rem;
-  height: 3.5rem;
+  /* position: fixed; */
+  /* bottom: 0rem; */
+  height: 100vh;
   /* border: 1px solid red; */
   padding: 0.25rem 0rem;
   background-color: rgb(255, 255, 255);
+  /* position: relative; */
+  /* top: 0rem; */
+  z-index: 20;
   border: 1px solid #f5f5f6;
   width: 100%;
   box-sizing: border-box;
   @media (min-width: 800px) {
+    position: fixed;
+    left: 0rem;
+    width: 7%;
+    display: grid;
+    grid-template-rows: auto auto;
+    background-color: rgb(255, 255, 255);
+  }
+  @media (max-width: 799px) {
     display: none;
   }
-
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  justify-content: space-around;
 `;
 const StyledName = styled.div`
   font-size: 0.7rem;
@@ -55,8 +63,22 @@ const StyledNavItem = styled(motion.div)`
     box-sizing: border-box;
   }
 `;
+const StyledSection = styled.div`
+  /* border: 1px solid red; */
+  display: grid;
+  grid-template-rows: 3rem 3rem 3rem 3rem;
+  grid-gap: 2rem;
+`;
+const StyledSection_two = styled.div`
+  /* border: 1px solid red; */
+  display: grid;
+  align-items: flex-end;
+`;
 const StyledIcon = styled(motion.div)``;
-const HomeNav = ({ navWidth }) => {
+const StyledUserImage = styled.img`
+  width: 3rem;
+`;
+const HomeNavDesktop = ({ navWidth }) => {
   const dispatch = useDispatch();
   const { colors } = useSelector((styles) => styles);
   const [size, setsize] = useState("1.7rem");
@@ -97,14 +119,7 @@ const HomeNav = ({ navWidth }) => {
       id: 3,
       name: "Settings",
       Icon: (
-        <StyledIcon
-          whileHover={{ scale: 1.2, rotate: 90 }}
-          whileTap={{
-            scale: 0.8,
-            rotate: -90,
-            borderRadius: "100%",
-          }}
-        >
+        <StyledIcon>
           <SettingsIcon color="inherit" size={size} />
         </StyledIcon>
       ),
@@ -164,26 +179,34 @@ const HomeNav = ({ navWidth }) => {
       }}
       exit={{ x: -100, opacity: 0 }}
     >
-      {[...navList].map((item, index) => {
-        return (
-          <StyledNavItem
-            className={`${item.active && classes.active} ${classes.nav_item}`}
-            layout={true}
-            key={item.id}
-            onClick={() => setActiveNav(index)}
-          >
-            {item.Icon}
-            <StyledName
-              className={item.active && classes.active}
-              color="inherit"
+      <StyledSection>
+        {" "}
+        {[...navList].map((item, index) => {
+          return (
+            <StyledNavItem
+              className={`${item.active && classes.active} ${classes.nav_item}`}
+              layout={true}
+              key={item.id}
+              onClick={() => setActiveNav(index)}
             >
-              {item.name}
-            </StyledName>
-          </StyledNavItem>
-        );
-      })}
+              {item.Icon}
+              <StyledName
+                className={item.active && classes.active}
+                color="inherit"
+              >
+                {item.name}
+              </StyledName>
+            </StyledNavItem>
+          );
+        })}
+      </StyledSection>
+      <StyledSection_two>
+        <center>
+          <StyledUserImage src={userIcon} />
+        </center>
+      </StyledSection_two>
     </StyledNav>
   );
 };
 
-export default HomeNav;
+export default HomeNavDesktop;

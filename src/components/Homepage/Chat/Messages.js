@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
   overflow-x: hidden;
   background-color: white;
   overflow-y: scroll;
-  @media (min-width: 500px) {
+  @media (min-width: 800px) {
     width: 50vw;
   }
   /* border: 1px solid red; */
@@ -57,6 +57,7 @@ const Right = styled(StyledMessageContainer)`
   float: right;
   grid-template-columns: auto 2rem;
   max-width: 60%;
+  color: white;
   /* border: 1px solid green; */
 `;
 const StyledProfileImage = styled.img`
@@ -117,7 +118,7 @@ const Messages = ({ messages, focused }) => {
                 key={message.message}
               >
                 <Right ref={ref}>
-                  <StyledMsgContent ps={"right"} bg={bgGrey}>
+                  <StyledMsgContent ps={"right"} bg={" #00BDD6FF"}>
                     {message.message}
                   </StyledMsgContent>
                   <StyledProfileImage src={userIcon} />
@@ -145,7 +146,7 @@ const Messages = ({ messages, focused }) => {
               >
                 <Left ref={ref}>
                   <StyledProfileImage src={userIcon} />
-                  <StyledMsgContent ps={"left"} bg={lightBgGreen}>
+                  <StyledMsgContent ps={"left"} bg={bgGrey}>
                     {message.message}
                   </StyledMsgContent>
                   <div></div>

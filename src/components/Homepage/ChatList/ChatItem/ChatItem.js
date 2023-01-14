@@ -11,15 +11,18 @@ import { collection, query, onSnapshot, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 import useFetchMessages from "../../../../Hooks/useFetchMessages";
 import { useMediaQuery } from "react-responsive";
-const StyledContainer = styled.div`
+import { motion } from "framer-motion";
+const StyledContainer = styled(motion.div)`
   /* height: 3rem; */
-  margin: 1rem 0;
+  margin: 1rem 2.5%;
   padding: 0.5rem 0;
-  width: 100%;
+  width: 95%;
+  overflow: hidden;
   font-family: "Inter", sans-serif;
   display: grid;
   grid-template-columns: 22% 55% 23%;
   transition: 0.5s;
+  border-radius: 1rem;
   :hover {
     background-color: ${({ hoverCl }) => hoverCl};
   }
@@ -54,6 +57,10 @@ const StyledUsername = styled.div`
 `;
 const StyledLastMsg = styled.div`
   font-size: 0.9rem;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   vertical-align: text-bottom;
   color: ${({ cl }) => cl};
 `;
@@ -113,7 +120,19 @@ const ChatItem = ({ item }) => {
   // console.log(chatItemData);
   return (
     <>
-      <StyledContainer onClick={showChatHandler} hoverCl={lightBgGreen}>
+      <StyledContainer
+        whileHover={{
+          scale: 1.05,
+          transition: {
+            type: "spring",
+            stiffness: 1000,
+            damping: 5,
+            mass: 5,
+          },
+        }}
+        onClick={showChatHandler}
+        hoverCl={lightBgGreen}
+      >
         <StyledRow_1>
           <StyledUserImage src={userImage} />
           <StyledActive bg={activeStatusForThisUser ? "#1dd75bff" : "grey"} />
