@@ -13,6 +13,7 @@ export const styleSlice = createSlice({
     },
     fonts: {
       main: '"Epilogue", sans-serif',
+      altmain: " 'Inter', sans-serif",
     },
   },
   reducers: {},
