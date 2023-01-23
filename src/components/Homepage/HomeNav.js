@@ -16,7 +16,7 @@ import { setShowChat } from "../../redux/home";
 import { setShowSettingsPage } from "../../redux/home";
 const StyledNav = styled(motion.nav)`
   position: fixed;
-  bottom: 0rem;
+  bottom: 0.01vh;
   height: 3.5rem;
   /* border: 1px solid red; */
   padding: 0.25rem 0rem;
@@ -43,6 +43,10 @@ const StyledNavItem = styled(motion.div)`
   text-align: center;
   box-sizing: border-box;
   transition: 0.5s;
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   /* padding: 0.5rem; */
   /* color: #414650; */
 

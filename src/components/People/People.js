@@ -12,6 +12,7 @@ import SearchUser from "./SearchUser";
 import { useDispatch } from "react-redux";
 import { setSearchedUser } from "../../redux/people";
 import HomeNav from "../Homepage/HomeNav";
+import { Helmet } from "react-helmet";
 const StyledImage = styled.img`
   width: 80%;
   max-width: 20rem;
@@ -27,6 +28,7 @@ const StyledContainer = styled(motion.div)`
 
 const StyledInput = styled.input`
   width: 100%;
+
   height: 2.5rem;
   margin: 2rem 0 2rem 0;
   border: none;
@@ -91,6 +93,10 @@ const StyledSearch = styled(motion.div)``;
 const StyledContentArea = styled(motion.div)``;
 
 const StyledBtn = styled.button`
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   width: 100%;
   border: none;
   background-color: white;
@@ -98,6 +104,11 @@ const StyledBtn = styled.button`
   height: 3rem;
   font-size: 1.1rem;
   border-radius: 1rem;
+`;
+const StyledInputContainer = styled.div`
+  /* border: 1px solid red; */
+  width: 100%;
+  max-width: 30rem;
 `;
 const People = () => {
   const dispatch = useDispatch();
@@ -145,6 +156,10 @@ const People = () => {
           },
         }}
       >
+        <Helmet>
+          <title> Textify | People </title>
+          <meta name="description" content="Home page" />
+        </Helmet>
         <StyledH2>Text anyone on Textify</StyledH2>
         <StyledP>
           Find people from every country and any place in the world
@@ -214,14 +229,18 @@ const People = () => {
             }}
             exit={{ y: -150 }}
           >
-            <StyledInput
-              value={searchInput}
-              onChange={handler}
-              colors={colors}
-            />
-            <StyledSearchIconContainer>
-              <SearchIcon size="1.3rem" />
-            </StyledSearchIconContainer>
+            <center>
+              <StyledInputContainer>
+                <StyledInput
+                  value={searchInput}
+                  onChange={handler}
+                  colors={colors}
+                />
+                <StyledSearchIconContainer>
+                  <SearchIcon size="1.3rem" />
+                </StyledSearchIconContainer>
+              </StyledInputContainer>
+            </center>
           </StyledSearch>
         )}
       </AnimatePresence>

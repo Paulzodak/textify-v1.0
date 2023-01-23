@@ -66,7 +66,7 @@ const Inputs = ({
   const [privacy, setPrivacy] = useState(true);
   const [emailIsValid, setEmailIsValid] = useState(true);
   const [passwordIsValid, setPasswordIsValid] = useState(true);
-  const [nicknameIsValid, setNicknameIsValid] = useState(true);
+  const [usernameIsValid, setUsernameIsValid] = useState(true);
   const emailHandler = (e) => {
     setEmail(e.target.value);
     if (
@@ -94,9 +94,9 @@ const Inputs = ({
   const nicknameHandler = (e) => {
     setNickname(e.target.value);
     if (e.target.value.length > 5) {
-      setNicknameIsValid(true);
+      setUsernameIsValid(true);
     } else {
-      setNicknameIsValid(false);
+      setUsernameIsValid(false);
     }
   };
 
@@ -146,18 +146,18 @@ const Inputs = ({
         <>
           <br />
           <br />
-          <StyledLabel cl={styles.colors.textBlack}>Nickname</StyledLabel>
+          <StyledLabel cl={styles.colors.textBlack}>Username</StyledLabel>
           <br />
           <br />
           <StyledUserIconContainer>
             <UserIcon size="1.5rem" />
           </StyledUserIconContainer>
           <StyledInput
-            className={nicknameIsValid ? classes.valid : classes.invalid}
+            className={usernameIsValid ? classes.valid : classes.invalid}
             onChange={nicknameHandler}
             onBlur={nicknameHandler}
             onFocus={nicknameHandler}
-            placeholder="Enter a nickname"
+            placeholder="Enter a username"
             colors={styles.colors}
           />
         </>

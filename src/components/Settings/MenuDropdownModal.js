@@ -9,19 +9,18 @@ import { useDispatch } from "react-redux";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import { setActive } from "../../redux/settings";
 
-const StyledBackdrop = styled.div`
-  background: red;
-  position: absolute;
-  height: 100vh;
-  width: 100vw;
-`;
 const StyledContainer = styled(motion.div)`
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   position: absolute;
   top: 3rem;
   right: ${({ ps }) => ps && "1rem"};
   background-color: white;
-  z-index: 1;
+  z-index: 2;
   /* right: 1rem; */
   /* border: 1px solid red; */
   width: 10rem;
@@ -46,7 +45,7 @@ const StyledMenuName = styled.div`
   font-size: 0.8rem;
   /* border: 1px solid red; */
 `;
-const MenuDropdown = ({ items, ps }) => {
+const MenuDropdownModal = ({ children, ps }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { textGrey } = useSelector((state) => state.styles.colors);
@@ -61,9 +60,6 @@ const MenuDropdown = ({ items, ps }) => {
 
     await signOut(auth);
   };
-
-  //   console.log(ps.right);
-  console.log(items);
 
   return (
     <StyledContainer
@@ -81,33 +77,13 @@ const MenuDropdown = ({ items, ps }) => {
         scale: 2,
       }}
     >
-      {[...items].map((item) => {
-        return (
-          <StyledMenuItem
-            layout={true}
-            key={item.title}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{
-              opacity: 1,
-              x: 0,
-              transition: { duration: item.duration },
-            }}
-            cl={item.active ? textBlack : textGrey}
-            whileHover={{ scale: 1.08 }}
-            onClick={item.action && signout}
-          >
-            <div>{item.icon}</div>
-            <StyledMenuName>{item.title}</StyledMenuName>
-            <RightArrow />
-          </StyledMenuItem>
-        );
-      })}
+      {children}
     </StyledContainer>
   );
 };
-MenuDropdown.propTypes = {
+MenuDropdownModal.propTypes = {
   navMenuItems: PropTypes.array,
   ps: PropTypes.string.isRequired, // THIS SHOWS WHERE THE DROPDOWN POSITION SHOULD FLOAT TO
 };
 
-export default MenuDropdown;
+export default MenuDropdownModal;

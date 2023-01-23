@@ -1,26 +1,37 @@
 import React from "react";
 import styled from "styled-components";
-import userImage from "../../../images/user.png";
+import userIcon from "../../../images/user.png";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { BsPencilFill as EditIcon } from "react-icons/bs";
 import { number } from "prop-types";
 import FileUpload from "./FileUpload";
-const StyledContainer = styled.div`
+import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet";
+import BasicModal from "../../BasicModal";
+import { motion } from "framer-motion";
+const StyledContainer = styled(motion.div)`
   font-family: ${({ font }) => font};
   margin-top: 4rem;
   /* border: 1px solid red; */
-  overflow: scroll;
-  height: 70vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 80vh;
   /* position: relative;
   bottom: 10rem;
   z-index: -1; */
 `;
 const StyledProfileImage = styled.img`
+  height: 9rem;
+  width: 9rem;
+  margin-top: 0.5rem;
+  border-radius: 100%;
+  /* border: 1px solid grey; */
+  box-shadow: 0px 0px 5px #95b0b6;
   /* margin: auto; */
 `;
 const StyledForm = styled.form`
-  margin-top: 2rem;
+  margin-top: 1rem;
   /* border: 1px solid red; */
   display: grid;
   grid-template-columns: 100%;
@@ -33,11 +44,12 @@ const StyledForm = styled.form`
     justify-content: space-between;
   }
 `;
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   width: 100%;
   height: 3rem;
   border-radius: 0.5rem;
   padding: 0 1rem;
+  font-size: 1.2rem;
   box-sizing: border-box;
   /* border: 1px solid ${({ bd }) => bd}; */
   border: none;
@@ -66,18 +78,19 @@ const StyledWrapper = styled.div`
 `;
 const StyledProfileWrapper = styled.div`
   position: relative;
-  z-index: -1;
+  z-index: 0;
   /* border: 1px solid red; */
   width: 10rem;
 `;
 const StyledEditBtn = styled.span`
+  z-index: 200;
   /* border: 1px solid red; */
   padding: 0.5rem 0.5rem 0.3rem 0.5rem;
   border-radius: 100%;
   box-sizing: border-box;
   box-shadow: 0px 0px 5px #95b0b6;
   position: absolute;
-  top: 6rem;
+  top: 7rem;
   left: 7rem;
   background-image: linear-gradient(
     to right top,
@@ -96,7 +109,7 @@ const StyledEditBtn = styled.span`
   );
 `;
 
-const StyledSaveBtn = styled.button`
+export const StyledSaveBtn = styled.button`
   float: left;
   font-size: 1rem;
   padding: 0.8rem 2rem;
@@ -105,6 +118,7 @@ const StyledSaveBtn = styled.button`
   color: ${({ cl }) => cl};
   box-shadow: ${({ formIsValid }) => formIsValid && "0px 0px 5px #95b0b6"};
   border: 1px solid ${({ bd }) => bd};
+
   /* background-color: transparent; */
   background-image: ${({ formisValid }) =>
     formisValid &&
@@ -125,6 +139,7 @@ const StyledSaveBtn = styled.button`
   )`};
 `;
 const Form = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const { textGrey } = useSelector((state) => state.styles.colors);
   const { bgGrey } = useSelector((state) => state.styles.colors);
   const { errBgRed } = useSelector((state) => state.styles.colors);
@@ -133,11 +148,12 @@ const Form = () => {
   const { lightBgGreen } = useSelector((state) => state.styles.colors);
   const { altmain } = useSelector((state) => state.styles.fonts);
   const [formIsValid, setFormIsValid] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
   console.log(formIsValid);
   const [inputs, setInputs] = useState({
     firstName: "",
     lastName: "",
-    email: "",
+    email: currentUser.email,
     number: "",
     address: "",
     city: "",
@@ -267,15 +283,43 @@ const Form = () => {
       ? setValid((prev) => validUpdater(prev, "country", true))
       : setValid((prev) => validUpdater(prev, "country", false));
   };
+  console.log(showUpload);
   return (
-    <StyledContainer>
+    <StyledContainer
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 360,
+        damping: 30,
+      }}
+      exit={{
+        opacity: 0,
+        scale: 0,
+      }}
+    >
+      <Helmet>
+        <title> Textify | Settings | Edit Profile </title>
+        <meta name="description" content="Home page" />
+      </Helmet>
       <center>
         <StyledProfileWrapper>
-          <StyledProfileImage src={userImage} />
-          <StyledEditBtn>
+          <StyledProfileImage
+            src={currentUser.pictureUrl ? currentUser.pictureUrl : userIcon}
+            //    src={userIcon}
+          />
+          <StyledEditBtn
+            onClick={() => setShowUpload((showUpload) => !showUpload)}
+          >
             <EditIcon color="white" />
           </StyledEditBtn>
         </StyledProfileWrapper>
+        <AnimatePresence>
+          {showUpload && (
+            <FileUpload setShowUpload={setShowUpload} />
+            // <BasicModal />
+          )}
+        </AnimatePresence>
         <StyledForm font={altmain}>
           <StyledWrapper>
             <StyledLabel cl={textBlack} htmlFor="FirstName">
@@ -318,6 +362,7 @@ const Form = () => {
             <StyledInput
               onChange={emailHandler}
               onFocus={emailHandler}
+              value={inputs.email}
               onBlur={emailHandler}
               placeholder="oje@gmail.com"
               bg={valid.email ? bgGrey : errBgRed}
@@ -437,7 +482,6 @@ const Form = () => {
             </StyledSaveBtn>
           </StyledWrapper>
         </StyledForm>
-        {/* <FileUpload /> */}
       </center>
     </StyledContainer>
   );

@@ -134,7 +134,7 @@ const ChatList = ({ mountChats }) => {
       >
         <AddUserIcon color="white" size="2.5rem" />
       </StyledAddUser>
-      <button onClick={() => setState(-1)}>set</button>
+      {/* <button onClick={() => setState(-1)}>set</button> */}
     </StyledContainer>
   );
 };

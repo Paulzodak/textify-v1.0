@@ -59,25 +59,25 @@ const Register = () => {
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [nickname, setNickname] = useState("");
+  const [username, setNickname] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
   const [checkboxIsChecked, setCheckBoxIsChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(nickname);
+  console.log(username);
   useEffect(() => {
     if (
       email.length > 11 &&
       email.includes("@") &&
       email.includes(".com") &&
       password.length > 5 &&
-      nickname.length > 5 &&
+      username.length > 5 &&
       checkboxIsChecked
     ) {
       setFormIsValid(true);
     } else {
       setFormIsValid(false);
     }
-  }, [email, password, nickname, checkboxIsChecked]);
+  }, [email, password, username, checkboxIsChecked]);
   const checkboxHandler = (e) => setCheckBoxIsChecked(e.target.checked);
   const signup = async (e) => {
     e.preventDefault();
@@ -89,10 +89,11 @@ const Register = () => {
         const docRef = doc(db, "users", res.user.uid);
         const data = {
           email: email,
-          nickname: nickname,
+          username: username,
           uid: res.user.uid,
           chats: [],
           isActive: false,
+          pictureUrl: "",
         };
         setDoc(docRef, data);
 
@@ -135,7 +136,7 @@ const Register = () => {
           <StyledForm>
             <Inputs
               showNickname
-              nickname={nickname}
+              username={username}
               setNickname={setNickname}
               email={email}
               setEmail={setEmail}

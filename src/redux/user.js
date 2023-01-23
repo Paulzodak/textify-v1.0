@@ -11,6 +11,7 @@ export const userSlice = createSlice({
       { id: Math.random() * 4 },
     ],
     messages: [],
+    currentUserImage: "",
   },
   reducers: {
     setCurrentUser: (state, action) => {

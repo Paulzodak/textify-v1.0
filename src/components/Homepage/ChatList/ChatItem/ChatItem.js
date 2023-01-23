@@ -14,6 +14,10 @@ import { useMediaQuery } from "react-responsive";
 import { motion } from "framer-motion";
 const StyledContainer = styled(motion.div)`
   /* height: 3rem; */
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   margin: 1rem 2.5%;
   padding: 0.5rem 0;
   width: 95%;
@@ -32,6 +36,7 @@ const Empty = styled.div`
   /* border: 1px solid red; */
 `;
 const StyledRow_1 = styled.div`
+  /* border: 1px solid red; */
   text-align: center;
   position: relative;
   top: 0;
@@ -69,9 +74,18 @@ const StyledDay = styled.div`
   color: ${({ cl }) => cl};
   font-size: 0.9rem;
 `;
-
+const StyledImageContainer = styled.div`
+  position: relative;
+  /* border: 1px solid red; */
+  width: 3.5rem;
+  height: 3.5rem;
+  margin: auto;
+`;
 const StyledUserImage = styled.img`
   width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 100%;
+  box-shadow: 0px 0px 5px #95b0b6;
 `;
 
 const StyledActive = styled.div`
@@ -79,8 +93,8 @@ const StyledActive = styled.div`
   width: 0.6rem;
   background-color: ${({ bg }) => bg};
   position: absolute;
-  top: 60%;
-  left: 62%;
+  top: 70%;
+  left: 70%;
   border-radius: 100%;
   border: 0.1rem solid white;
 `;
@@ -134,8 +148,14 @@ const ChatItem = ({ item }) => {
         hoverCl={lightBgGreen}
       >
         <StyledRow_1>
-          <StyledUserImage src={userImage} />
-          <StyledActive bg={activeStatusForThisUser ? "#1dd75bff" : "grey"} />
+          <StyledImageContainer>
+            <StyledUserImage
+              src={
+                chatItemData.pictureUrl ? chatItemData.pictureUrl : userImage
+              }
+            />
+            <StyledActive bg={activeStatusForThisUser ? "#1dd75bff" : "grey"} />
+          </StyledImageContainer>
         </StyledRow_1>
         <StyledRow_2>
           <StyledUsername cl={textBlack}>{item.username}</StyledUsername>

@@ -9,24 +9,43 @@ export const settingsSlice = createSlice({
       // WOULD BE REFACTORED LATER {USING ELEMENTS IN REDUX STATES IS A BAD APPROACH}
       navMenuItems: [
         {
+          id: 0,
           title: "Edit Profile",
           icon: <PencilIcon />,
           active: true,
           duration: 0.8,
         },
         {
+          id: 1,
           title: "Security",
           icon: <SecurityIcon />,
           active: false,
           duration: 1,
         },
-        { title: "Theme", icon: <ThemeIcon />, active: false, duration: 1.2 },
+        {
+          id: 2,
+          title: "Theme",
+          icon: <ThemeIcon />,
+          active: false,
+          duration: 1.2,
+        },
       ],
       utilityMenuItems: [
         { title: "Logout", icon: <PencilIcon />, action: "signout" },
       ],
     },
   },
+  reducers: {
+    setActive: (state, action) => {
+      state.layout.navMenuItems.map((item, index) => {
+        if (item.id === action.payload.index) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+      });
+    },
+  },
 });
-export const {} = settingsSlice.actions;
+export const { setActive } = settingsSlice.actions;
 export default settingsSlice.reducer;

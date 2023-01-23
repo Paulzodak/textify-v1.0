@@ -35,6 +35,7 @@ import useFetchMessages from "../../../Hooks/useFetchMessages";
 import { pushMessage } from "../../../redux/user";
 import useConsistentCurrentUserDataFetch from "../../../Hooks/useConsistentCurrentUserDataFetch";
 import useConsistentlyFetchChatItemData from "../../../Hooks/useConsistentlyFetchChatItemData";
+import { Helmet } from "react-helmet";
 const StyledContainer = styled(motion.div)`
   position: absolute;
   top: 0rem;
@@ -81,8 +82,11 @@ const StyledBackIconContainer = styled.div`
 `;
 const StyledProfileImage = styled.img`
   width: 3rem;
+  height: 3rem;
   position: relative;
   top: 10%;
+  border-radius: 100%;
+  box-shadow: 0px 0px 5px #95b0b6;
   /* height: 100%; */
 `;
 const StyledUsername = styled.div`
@@ -257,12 +261,18 @@ const Chat = () => {
       key="content"
     >
       {/* <StyledSubContainer> */}
+      <Helmet>
+        <title> Textify | Chats - {chatItemData.username}</title>
+        <meta name="description" content="Home page" />
+      </Helmet>
       <div>
         <StyledNav border={bgGrey}>
           <StyledBackIconContainer onClick={hideChatHandler}>
             <BackIcon size="1.5rem" />
           </StyledBackIconContainer>
-          <StyledProfileImage src={userImage} />
+          <StyledProfileImage
+            src={chatItemData.pictureUrl ? chatItemData.pictureUrl : userImage}
+          />
           <div>
             <StyledUsername>{chatItemData.username}</StyledUsername>
             <StyledActive cl={textGrey}>

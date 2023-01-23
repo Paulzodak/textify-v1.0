@@ -32,6 +32,7 @@ import useConsistentlyFetchChatItemData from "../Hooks/useConsistentlyFetchChatI
 import ChatPage from "../layout/ChatPage";
 import HomeNavDesktop from "../components/Homepage/HomeNavDesktop";
 import SettingsPage from "../layout/SettingsPage";
+import { Helmet } from "react-helmet";
 const StyledHeader = styled.header`
   position: fixed;
   top: 0rem;
@@ -138,6 +139,10 @@ const Home = () => {
   return (
     <>
       <Container>
+        <Helmet>
+          <title> Textify | Home </title>
+          <meta name="description" content="Home page" />
+        </Helmet>
         <AnimatePresence>
           {/*CONDITIONALLY RENDERED INDIVIDUALLY DUE TO EXIT ANIMATION CRITERIA */}
           <StyledSubContainer>

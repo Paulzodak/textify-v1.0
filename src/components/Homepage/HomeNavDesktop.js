@@ -16,6 +16,10 @@ import { setShowChat } from "../../redux/home";
 import userIcon from "../../images/user.png";
 import { setShowSettingsPage } from "../../redux/home";
 const StyledNav = styled(motion.nav)`
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   /* position: fixed; */
   /* bottom: 0rem; */
   height: 100vh;
@@ -67,7 +71,7 @@ const StyledSection = styled.div`
   /* border: 1px solid red; */
   display: grid;
   grid-template-rows: 3rem 3rem 3rem 3rem;
-  grid-gap: 2rem;
+  grid-gap: 1rem;
 `;
 const StyledSection_two = styled.div`
   /* border: 1px solid red; */
@@ -77,8 +81,12 @@ const StyledSection_two = styled.div`
 const StyledIcon = styled(motion.div)``;
 const StyledUserImage = styled.img`
   width: 3rem;
+  height: 3rem;
+  box-shadow: 0px 0px 5px #95b0b6;
+  border-radius: 100%;
 `;
 const HomeNavDesktop = ({ navWidth }) => {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { colors } = useSelector((styles) => styles);
   const [size, setsize] = useState("1.7rem");
@@ -202,7 +210,9 @@ const HomeNavDesktop = ({ navWidth }) => {
       </StyledSection>
       <StyledSection_two>
         <center>
-          <StyledUserImage src={userIcon} />
+          <StyledUserImage
+            src={currentUser.pictureUrl ? currentUser.pictureUrl : userIcon}
+          />
         </center>
       </StyledSection_two>
     </StyledNav>

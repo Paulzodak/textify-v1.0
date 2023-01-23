@@ -16,6 +16,10 @@ import {
   setShowChat,
 } from "../../redux/home";
 const StyledContainer = styled(motion.div)`
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   width: 100%;
   /* height: 4rem; */
   box-shadow: 0px 0px 50px rgb(240, 240, 240);
@@ -97,6 +101,7 @@ const SearchUser = ({ item }) => {
           isActive: currentUser.isActive,
           isTyping: false,
           uid: currentUser.uid,
+          pictureUrl: currentUser.pictureUrl,
         });
 
         tempChats.map((chat) => {
@@ -134,6 +139,7 @@ const SearchUser = ({ item }) => {
           isActive: searchedUser.isActive,
           isTyping: false,
           uid: searchedUser.uid,
+          pictureUrl: searchedUser.pictureUrl,
         });
 
         const docRef = doc(db, "users", currentUser.uid);
@@ -161,6 +167,7 @@ const SearchUser = ({ item }) => {
         isActive: currentUser.isActive,
         isTyping: false,
         uid: currentUser.uid,
+        pictureUrl: currentUser.pictureUrl,
       });
 
       const docRef = doc(db, "users", searchedUser.uid);
@@ -178,6 +185,7 @@ const SearchUser = ({ item }) => {
         isActive: searchedUser.isActive,
         isTyping: false,
         uid: searchedUser.uid,
+        pictureUrl: searchedUser.pictureUrl,
       });
 
       const docRef = doc(db, "users", currentUser.uid);

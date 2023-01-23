@@ -4,15 +4,23 @@ import { motion } from "framer-motion";
 import { FiChevronDown as DownCaret } from "react-icons/fi";
 import userIcon from "../../images/user.png";
 import { useState } from "react";
-import MenuDropdown from "./MenuDropdown";
+// import MenuDropdown from "./MenuDropdownModal";
+// import MenuDropdownModal from "./MenuDropdownModal";
 import { AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import NavMenu from "./NavMenu";
+import UtilityMenu from "./UtilityMenu";
 const StyledContainer = styled.section`
   /* border: 1px solid red; */
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+  user-select: none; /* Standard */
   box-shadow: 0px 0px 10px rgb(175, 206, 210);
   position: fixed;
   top: 0rem;
+  z-index: 1;
   width: 100vw;
   background-color: white;
   padding: 1rem;
@@ -51,6 +59,8 @@ const StyledUserImage = styled.img`
   float: right;
   height: 1.7rem;
   width: 1.7rem;
+  border-radius: 100%;
+  box-shadow: 0px 0px 5px #95b0b6;
 `;
 const NavBar = () => {
   const [showNavMenu, setShowNavMenu] = useState([false, false]);
@@ -81,7 +91,7 @@ const NavBar = () => {
           Edit Profile
         </StyledMenuHeader>
         <AnimatePresence>
-          {showNavMenu[0] && <MenuDropdown items={navMenuItems} />}
+          {showNavMenu[0] && <NavMenu items={navMenuItems} />}
         </AnimatePresence>
         <StyledDownCaret
           onClick={() => {
@@ -98,11 +108,11 @@ const NavBar = () => {
             showMenuHandler(1);
           }}
           showMenu={showNavMenu[1]}
-          src={userIcon}
+          src={currentUser.pictureUrl ? currentUser.pictureUrl : userIcon}
         />
         <AnimatePresence>
           {showNavMenu[1] && (
-            <MenuDropdown ps={"right"} items={utilityMenuItems} />
+            <UtilityMenu ps={"right"} items={utilityMenuItems} />
           )}
         </AnimatePresence>
         <StyledDownCaret2
