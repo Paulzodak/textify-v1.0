@@ -22,16 +22,14 @@ import { StyledContainer } from "../UI/signLoginGlobal";
 import { StyledH1 } from "../UI/signLoginGlobal";
 import { StyledP } from "../UI/signLoginGlobal";
 import { StyledSignInBtn } from "../UI/Buttons";
-
-import { addDoc, collection } from "firebase/firestore";
-
+import { addDoc, getDoc, collection, setDoc } from "firebase/firestore";
 import { db } from "../components/firebase";
-
-import { setDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import Textify from "../components/LoadingTheme/Textify";
 import { TailSpin } from "react-loader-spinner";
 import { StyledLoadingContainer } from "../UI/signLoginGlobal";
+import { Toast } from "../UI/signLoginGlobal";
+import Swal from "sweetalert2";
 const StyledHello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
@@ -59,6 +57,7 @@ const Register = () => {
   const { user } = useSelector((user) => user);
   // console.log(user);
   const { styles } = useSelector((styles) => styles);
+  const { mainGreen } = useSelector((state) => state.styles.colors);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setNickname] = useState("");
@@ -81,13 +80,13 @@ const Register = () => {
     }
   }, [email, password, username, checkboxIsChecked]);
   const checkboxHandler = (e) => setCheckBoxIsChecked(e.target.checked);
+
   const signup = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
-        setLoading(false);
         const docRef = doc(db, "users", res.user.uid);
         const data = {
           email: email,
@@ -97,17 +96,47 @@ const Register = () => {
           isActive: false,
           pictureUrl: "",
         };
-        setDoc(docRef, data);
-
-        // const docRef2 = doc(db, "users", res.user.uid, "chats", "chats");
-
-        // setDoc(docRef2, data);
-        alert("Successful, You can now proceed to Login!");
-        navigate("/");
+        setDoc(docRef, data)
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              iconColor: mainGreen,
+              title: "Successful",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            setTimeout(() => navigate("/Home"), [1000]);
+          })
+          .catch((res) => {
+            Toast.fire({
+              title: "Error!",
+              text: res.message,
+              icon: "error",
+              confirmButtonText: "Okay",
+              confirmButtonColor: mainGreen,
+            });
+          });
+        // Swal.fire({
+        //   icon: "success",
+        //   iconColor: mainGreen,
+        //   title: "Successful, You can now proceed to Login!",
+        //   showConfirmButton: false,
+        //   timer: 1500,
+        // });
+        // setTimeout(() => navigate("/"), [1000]);
       })
       .catch((res) => {
         setLoading(false);
-        alert(res.message);
+        Toast.fire({
+          title: "Error!",
+          text:
+            res.message === "Firebase: Error (auth/email-already-in-use)." &&
+            "Email has been taken, Choose a different email",
+          icon: "error",
+          confirmButtonText: "Okay",
+          confirmButtonColor: mainGreen,
+        });
+        // alert(res.message);
       });
   };
 
@@ -151,7 +180,7 @@ const Register = () => {
                 type="checkbox"
               />
               <StyledTerms>
-                I agree with
+                I agree with &nbsp;
                 <StyledP cl={styles.colors.mainGreen}>
                   Terms & Conditions
                 </StyledP>

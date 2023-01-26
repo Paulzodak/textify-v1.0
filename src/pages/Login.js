@@ -28,6 +28,8 @@ import { db } from "../components/firebase";
 import Textify from "../components/LoadingTheme/Textify";
 import { TailSpin } from "react-loader-spinner";
 import { StyledLoadingContainer } from "../UI/signLoginGlobal";
+import { Toast } from "../UI/signLoginGlobal";
+import { getDoc, doc } from "firebase/firestore";
 const StyledHello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
@@ -51,23 +53,32 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((user) => user);
+  const { mainGreen } = useSelector((state) => state.styles.colors);
   // console.log(user);
   const { styles } = useSelector((styles) => styles);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [formIsValid, setFormIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
+  console.log(email, password);
+
   // console.log(email);
   // console.log(password);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      dispatch(setCurrentUser({ user: user.email }));
-      navigate("/Home");
-      // console.log("true :" + user);
-    } else {
-      // console.log("false :" + user);
-    }
-  });
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        getDoc(docRef).then((res) => {
+          dispatch(setCurrentUser({ currentUser: res.data() }));
+          setTimeout(() => navigate("/Home"), [200]);
+        });
+      } else {
+        // console.log("false :" + user);
+      }
+    });
+  }, []);
+
   useEffect(() => {
     if (
       email.length > 11 &&
@@ -84,15 +95,27 @@ const Login = () => {
     setLoading(true);
     e.preventDefault();
     setTimeout(() => {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((res) => {
-          setLoading(false);
-          // navigate("/");
-        })
-        .catch((res) => {
-          setLoading(false);
-          alert(res.message);
-        });
+      signInWithEmailAndPassword(auth, email, password).then((res) => {
+        setLoading(false);
+        console.log(res);
+        navigate("/Home");
+        // setTimeout(() => navigate("/Home"), [200]);
+        // navigate("/");
+      });
+      // .catch((res) => {
+      //   setLoading(false);
+      //   // alert(res.message);
+      //   Toast.fire({
+      //     title: "Error!",
+      //     text:
+      //       res.message === "Firebase: Error (auth/user-not-found)."
+      //         ? "User not found, Check your credentials"
+      //         : "unknown",
+      //     icon: "error",
+      //     confirmButtonText: "Okay",
+      //     confirmButtonColor: mainGreen,
+      //   });
+      // });
     }, 2000);
   };
 

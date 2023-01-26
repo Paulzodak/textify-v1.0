@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 const StyledContainer = styled(motion.div)`
   /* border: 1px solid red; */
   padding: 0 0 3rem 0;
-  margin: 4rem 0 0 0;
+  margin: 4rem 2rem 0 2rem;
   height: 80vh;
   overflow-y: scroll;
   box-sizing: border-box;

@@ -89,7 +89,7 @@ const Home = () => {
   const { showSettingsPage } = useSelector((state) => state.home.layout);
   const { searchedUser } = useSelector((state) => state.people);
   const { chatItemData } = useSelector((state) => state.people);
-
+  console.log(currentUser);
   // const signout = async () => {
   //   await signOut(auth);
   //   // SETS ACTIVE TO FALSE IN DB

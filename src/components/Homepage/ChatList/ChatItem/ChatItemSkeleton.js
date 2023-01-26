@@ -7,7 +7,10 @@ import { StyledRow_3_skeleton } from "./ChatItem";
 import styled from "styled-components";
 const StyledContainer = styled.div`
   margin: 1rem;
-  width: 50vw;
+  width: 100%;
+  position: relative;
+  left: 0rem;
+  /* border: 1px solid red; */
 `;
 const ChatItemSkeleton = () => {
   return (
@@ -15,14 +18,14 @@ const ChatItemSkeleton = () => {
       <center>
         <ContentLoader
           speed={2}
-          // width={476}
+          width={"100%"}
           height={44}
           viewBox="0 0 476 44"
           backgroundColor="#f3f3f3"
           foregroundColor="#ecebeb"
         >
-          <rect x="48" y="8" rx="3" ry="3" width="200" height="6" />
-          <rect x="48" y="26" rx="3" ry="3" width="200" height="6" />
+          <rect x="48" y="8" rx="3" ry="3" width="80%" height="6" />
+          <rect x="48" y="26" rx="3" ry="3" width="80%" height="6" />
           <circle cx="20" cy="20" r="20" />
         </ContentLoader>
       </center>

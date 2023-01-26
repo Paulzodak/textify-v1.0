@@ -35,7 +35,7 @@ const StyledForm = styled.form`
   /* border: 1px solid red; */
   display: grid;
   grid-template-columns: 100%;
-  width: 80%;
+  width: 85%;
   max-width: 30rem;
   row-gap: 1rem;
   @media (min-width: 800px) {

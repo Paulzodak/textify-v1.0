@@ -24,6 +24,7 @@ const StyledNav = styled(motion.nav)`
   border: 1px solid #f5f5f6;
   width: 100%;
   box-sizing: border-box;
+  z-index: 10;
   @media (min-width: 800px) {
     display: none;
   }

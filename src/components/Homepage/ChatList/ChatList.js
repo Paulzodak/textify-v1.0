@@ -16,7 +16,9 @@ const StyledContainer = styled(motion.div)`
   height: 100%;
   width: 100%;
 `;
-const StyledChatsContainer = styled.div``;
+const StyledChatsContainer = styled.div`
+  /* border: 1px solid red; */
+`;
 
 const StyledAddUser = styled(motion.div)`
   border-radius: 100%;

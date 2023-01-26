@@ -27,6 +27,7 @@ const StyledContainer = styled(motion.div)`
   grid-template-columns: 22% 55% 23%;
   transition: 0.5s;
   border-radius: 1rem;
+  background-color: ${({ bg }) => bg};
   :hover {
     background-color: ${({ hoverCl }) => hoverCl};
   }
@@ -111,6 +112,7 @@ const ChatItem = ({ item }) => {
 
   const { showChat } = useSelector((state) => state.home.layout);
   const isTablet = useMediaQuery({ query: "(min-width: 500px)" });
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setChatItemData({ chatItemData: item }));
@@ -133,50 +135,44 @@ const ChatItem = ({ item }) => {
   // useFetchMessages(currentUser.uid, chatItemData.uid);
   // console.log(chatItemData);
   return (
-    <>
-      <StyledContainer
-        whileHover={{
-          scale: 1.05,
-          transition: {
-            type: "spring",
-            stiffness: 1000,
-            damping: 5,
-            mass: 5,
-          },
-        }}
-        onClick={showChatHandler}
-        hoverCl={lightBgGreen}
-      >
-        <StyledRow_1>
-          <StyledImageContainer>
-            <StyledUserImage
-              src={
-                chatItemData.pictureUrl ? chatItemData.pictureUrl : userImage
-              }
-            />
-            <StyledActive bg={activeStatusForThisUser ? "#1dd75bff" : "grey"} />
-          </StyledImageContainer>
-        </StyledRow_1>
-        <StyledRow_2>
-          <StyledUsername cl={textBlack}>{item.username}</StyledUsername>
-          {item.messages.map((items, index) => {
-            if (index === item.messages.length - 1) {
-              return (
-                <StyledLastMsg cl={textGrey}>{items.message}</StyledLastMsg>
-              );
-            }
-          })}
-        </StyledRow_2>
-        <StyledRow_3>
-          <Empty />
-          {item.messages.map((item, index) => {
-            if (index === 0) {
-              return <StyledDay cl={textGrey}>{item.createdAt}</StyledDay>;
-            }
-          })}
-        </StyledRow_3>
-      </StyledContainer>
-    </>
+    <StyledContainer
+      whileHover={{
+        scale: 1.05,
+        transition: {
+          type: "spring",
+          stiffness: 1000,
+          damping: 5,
+          mass: 5,
+        },
+      }}
+      onClick={showChatHandler}
+      hoverCl={lightBgGreen}
+    >
+      <StyledRow_1>
+        <StyledImageContainer>
+          <StyledUserImage
+            src={item.pictureUrl ? item.pictureUrl : userImage}
+          />
+          <StyledActive bg={activeStatusForThisUser ? "#1dd75bff" : "grey"} />
+        </StyledImageContainer>
+      </StyledRow_1>
+      <StyledRow_2>
+        <StyledUsername cl={textBlack}>{item.username}</StyledUsername>
+        {item.messages.map((items, index) => {
+          if (index === item.messages.length - 1) {
+            return <StyledLastMsg cl={textGrey}>{items.message}</StyledLastMsg>;
+          }
+        })}
+      </StyledRow_2>
+      <StyledRow_3>
+        <Empty />
+        {item.messages.map((item, index) => {
+          if (index === 0) {
+            return <StyledDay cl={textGrey}>{item.createdAt}</StyledDay>;
+          }
+        })}
+      </StyledRow_3>
+    </StyledContainer>
   );
 };
 

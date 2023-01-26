@@ -15,7 +15,10 @@ const UtilityMenu = ({ items, ps }) => {
   console.log(items);
 
   const clickHandler = async () => {
-    navigate("/");
+    setTimeout(() => {
+      navigate("/");
+      window.location.reload(true);
+    }, [200]);
     // SETS ACTIVE TO FALSE IN DB
     // dispatch(setActive({ isActive: false }));
     // const docRef = doc(db, "users", currentUser.uid);

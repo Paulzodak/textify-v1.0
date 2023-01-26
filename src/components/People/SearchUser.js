@@ -33,6 +33,9 @@ const StyledContainer = styled(motion.div)`
 `;
 const StyledUserImage = styled.img`
   width: 7rem;
+  height: 7rem;
+  box-shadow: 0px 0px 5px #95b0b6;
+  border-radius: 100%;
 `;
 const StyledUsername = styled.h1`
   margin: 0;
@@ -207,7 +210,9 @@ const SearchUser = ({ item }) => {
     <>
       {showChat && <Chat />}
       <StyledContainer cl={colors.mainGreen}>
-        <StyledUserImage src={userImage} />
+        <StyledUserImage
+          src={searchedUser.pictureUrl ? searchedUser.pictureUrl : userImage}
+        />
         <StyledUsername>{searchedUser.username}</StyledUsername>
         <div></div>
         <StyledBtn onClick={sendMessageHandler}>Send Message</StyledBtn>

@@ -6,7 +6,7 @@ const StyledContainer = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.33);
   position: fixed;
   top: 0;
-  z-index: 10;
+  z-index: 200;
   /* left: 15%; */
   /* box-shadow: 0px 0px 80px rgb(235, 235, 235); */
   /* border-radius: 1rem; */

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import Swal from "sweetalert2";
 export const StyledContentArea = styled.div`
   /* border: 1px solid green; */
   position: relative;
@@ -36,7 +36,7 @@ export const StyledContainer = styled.div`
   @media (min-width: 800px) {
     border-radius: 1rem;
     box-shadow: 0px 0px 80px rgb(235, 235, 235);
-    padding: 3rem 1rem;
+    padding: 4rem 2rem 2rem 2rem;
     width: 30rem;
     margin: 10vh auto 0 auto;
   }
@@ -55,3 +55,11 @@ export const StyledLoadingContainer = styled.div`
   height: 100%;
   /* width: 3rem; */
 `;
+export const Toast = Swal.mixin({
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
