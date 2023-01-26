@@ -30,6 +30,8 @@ import { db } from "../components/firebase";
 import { setDoc } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import Textify from "../components/LoadingTheme/Textify";
+import { TailSpin } from "react-loader-spinner";
+import { StyledLoadingContainer } from "../UI/signLoginGlobal";
 const StyledHello = styled.h1`
   color: ${({ cl }) => cl};
   /* margin: 0.5rem 0; */
@@ -126,7 +128,6 @@ const Register = () => {
       }}
     >
       <StyledContainer font={styles.fonts.main}>
-        {loading ? <Textify size="1rem" top="40%" left="25%" /> : null}
         <StyledHeroImg src={Hero} />
         <StyledContentArea>
           <StyledHello cl={styles.colors.textBlack}>Welcome!</StyledHello>
@@ -163,7 +164,22 @@ const Register = () => {
               colors={styles.colors}
               disabled={!formIsValid}
             >
-              Sign Up
+              {loading ? (
+                <center>
+                  <StyledLoadingContainer>
+                    <TailSpin
+                      height="36"
+                      width="36"
+                      color="white"
+                      ariaLabel="tail-spin-loading"
+                      radius="3"
+                      visible={true}
+                    />
+                  </StyledLoadingContainer>
+                </center>
+              ) : (
+                "Sign Up"
+              )}
             </StyledSignInBtn>
           </StyledForm>
           <StyledH1>
